@@ -1,0 +1,1 @@
+unchanged sibling of deleted regular file

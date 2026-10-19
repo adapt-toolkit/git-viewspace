@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::submodule-objects",
+  "labels": [],
+  "prerequisites": ["command:python3", "command:git", "python-module:pygit2"],
+  "config": {
+    "argv": ["python3", "-m", "unittest", "tests.test_submodules.SubmoduleTests.test_explicit_acquisition_pin_and_old_snapshot", "tests.test_submodules.SubmoduleTests.test_pin_and_overlay_ownership_boundaries"],
+    "cwd": {"anchor": "repository", "path": "apps/git-viewspace"},
+    "environment": {"inherit": ["HOME", "PATH"], "set": {"PYTHONDONTWRITEBYTECODE": "1", "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs", "TMPDIR": "{workspace}"}},
+    "timeout_seconds": 60,
+    "compare": ["status"],
+    "filesystem": null
+  }
+}

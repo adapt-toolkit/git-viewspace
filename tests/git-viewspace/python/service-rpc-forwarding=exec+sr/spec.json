@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::service-rpc-forwarding",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_online_view_command_uses_one_rpc_without_full_root_reload",
+      "tests.test_stage2.Stage2Test.test_view_destroy_threads_optional_expected_identity",
+      "tests.test_stage2.Stage2Test.test_existing_view_service_threads_optional_identity_without_null"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::overlay-sync::redirect-and-pathspec-errors",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_overlay_sync.OverlaySyncUnitTests.test_directory_may_be_both_opaque_and_impure",
+      "test_overlay_sync.OverlaySyncUnitTests.test_cross_redirect_overlap_is_rejected",
+      "test_overlay_sync.OverlaySyncUnitTests.test_git_pathspecs_handle_empty_and_root_opaque"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace/OverlaySync/tests",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

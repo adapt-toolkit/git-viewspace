@@ -1,0 +1,45 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::status-contention",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_status_contention.StatusContentionTests.test_delayed_response_is_not_reported_as_absence",
+      "tests.test_status_contention.StatusContentionTests.test_readonly_deadline_bounds_admission_and_fragmented_response",
+      "tests.test_status_contention.StatusContentionTests.test_startup_probe_uses_bounded_status_wait",
+      "tests.test_status_contention.StatusContentionTests.test_transport_timeout_cannot_spawn_or_read_offline",
+      "tests.test_status_contention.StatusContentionTests.test_confirmed_absence_still_allows_startup",
+      "tests.test_status_contention.StatusContentionTests.test_missing_socket_with_live_root_owner_cannot_read_offline"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs",
+        "TMPDIR": "{workspace}",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_SYSTEM": "/dev/null"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

@@ -1,0 +1,35 @@
+name: Tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  basic:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfuse2t64
+          python -m pip install . -r requirements-test.txt
+      - name: Run unprivileged regression suite
+        run: |
+          TEST_SCRATCH="$(mktemp -d /tmp/gvs.XXXXXX)"
+          python utils/viewspace_test.py run --scope basic \
+            --scratch-root "$TEST_SCRATCH" \
+            --report "$RUNNER_TEMP/results.json" \
+            --html-report "$RUNNER_TEMP/results.html"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-${{ matrix.python }}
+          path: |
+            ${{ runner.temp }}/results.json
+            ${{ runner.temp }}/results.html

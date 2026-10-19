@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::harness-supervisor-errors",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test.HarnessTests.test_large_supervisor_start_error_is_bounded",
+      "utils.tests.test_viewspace_test.HarnessTests.test_exec_timeout_is_infrastructure_not_expected_failure"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

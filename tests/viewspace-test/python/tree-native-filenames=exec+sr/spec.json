@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "python::tree-native-filenames",
+  "labels": [],
+  "prerequisites": [
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_cp437_zip_name_is_materialized_as_original_raw_bytes",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_zip_rejects_raw_nul_in_entry_name",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_arbitrary_linux_filename_bytes_round_trip"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

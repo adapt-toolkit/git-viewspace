@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::git-error-translation",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_missing_pinned_commit_is_an_io_error",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_pygit_repository_errors_are_translated_to_io_errors",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_corrupt_commit_tree_is_reported_as_an_io_error",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_tree_entry_lookup_and_type_corruption_are_io_errors",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_invalid_symlink_target_encodings_are_io_errors",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_gitlinks_are_rejected_as_unsupported_entries",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_path_validation_rejects_absolute_and_redundant_paths",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_path_and_operation_failures_preserve_errno_distinctions"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

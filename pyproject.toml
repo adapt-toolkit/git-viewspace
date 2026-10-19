@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "git-viewspace"
+version = "0.1.0"
+description = "Independent agent workspaces backed by one shared Git repository"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{name = "Adapt Framework Solutions"}]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["fusepy>=3.0.1,<4", "pygit2>=1.20,<1.21"]
+
+[project.urls]
+Repository = "https://github.com/adapt-toolkit/git-viewspace"
+Documentation = "https://github.com/adapt-toolkit/git-viewspace#readme"
+Issues = "https://github.com/adapt-toolkit/git-viewspace/issues"
+
+[project.scripts]
+git-viewspace = "git_viewspace.cli:main"
+git-viewspace-fs = "git_viewspace_fs.__main__:console_main"
+
+[tool.setuptools.package-dir]
+git_viewspace = "apps/git-viewspace/git_viewspace"
+git_viewspace_fs = "apps/git-viewspace-fs/git_viewspace_fs"
+
+[tool.setuptools.packages.find]
+where = ["apps/git-viewspace", "apps/git-viewspace-fs"]
+include = ["git_viewspace", "git_viewspace.*", "git_viewspace_fs", "git_viewspace_fs.*"]
+
+[tool.setuptools.package-data]
+git_viewspace = ["OVERLAY_SYNC_TODO.md"]
+"git_viewspace_fs.tests" = ["make_test_repo.sh"]

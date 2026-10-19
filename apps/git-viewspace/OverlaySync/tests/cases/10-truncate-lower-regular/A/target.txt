@@ -1,0 +1,2 @@
+this lower file starts nonempty
+and contains more than one line

@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::harness-selection",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test.HarnessTests.test_selection_supports_exact_segment_tag_and_glob_and_rejects_empty",
+      "utils.tests.test_viewspace_test.HarnessTests.test_scope_selection_is_cumulative_and_unscoped_is_always_included"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

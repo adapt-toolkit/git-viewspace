@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::harness-inventory",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test.HarnessTests.test_inventory_rejects_missing_and_stale_registered_selectors",
+      "utils.tests.test_viewspace_test.HarnessTests.test_cargo_adapter_attributes_two_tests_from_one_built_target"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "format": "viewspace-stage0-qualification-capsule-v1",
+  "run_uuid": "956a13f5-26e8-4ebb-8925-5783594d79aa",
+  "self_binding": "capsule-manifest.json intentionally does not hash itself; the containing Git commit supplies its immutable identity.",
+  "capsule_files": {
+    "README.md": {
+      "bytes": 3256,
+      "method": "derived human-readable index",
+      "role": "capsule documentation",
+      "sha256": "7fd4a46c0d3b279472df2840efc6ed0cc774414bc4ad05471b3c1d55e56fb828"
+    },
+    "artifact-format.json": {
+      "bytes": 366318,
+      "method": "byte-for-byte copy from canonical evidence",
+      "role": "machine-readable artifact grammar and occurrence maps",
+      "sha256": "6d2a9a7ea011eb6ce2eac9f4984f2737f937dd425ad9167864cae61b9e7b68a0"
+    },
+    "fixture-contract.json": {
+      "bytes": 5378,
+      "method": "lossless compaction of fixture-manifest.json; expanded large entries replaced by their exact deterministic generator",
+      "role": "fixture and commit contract",
+      "sha256": "06d16f52b3076d7155c504216a1b391f6786955199914084c64f1d33b77ba1eb"
+    },
+    "qualification-profile.json": {
+      "bytes": 7828,
+      "method": "path-neutral extraction from environment.json, runtime/run-fingerprint.json, manifest.json, and retained source comparison",
+      "role": "qualified environment, source, and evidence binding",
+      "sha256": "f43dd2dbc3b16c94b38296911a21c684ea01148de7a04168ab5eb80738a1dec5"
+    },
+    "results-summary.json": {
+      "bytes": 9244,
+      "method": "path-neutral projection of results.jsonl plus final manifest status",
+      "role": "complete scenario result summary",
+      "sha256": "77649919dbc1c01339acdd9f168f9d613bbc258a633bb7c07382abea587be489"
+    },
+    "scenario-registry.json": {
+      "bytes": 10253,
+      "method": "byte-for-byte copy from canonical evidence",
+      "role": "ordered scenario definitions",
+      "sha256": "bd89f8787c29183ae466d2d470746fd5b6b18ead8869a404eba12ffae26569f0"
+    },
+    "study-specification.md": {
+      "bytes": 24687,
+      "method": "relocated and terminology-normalized completed Stage 0 study specification",
+      "role": "qualification procedure and exit criteria",
+      "sha256": "55b2d315b12c9e5b8ad0b137a34d541aeb0e5b2957c87dd33639a54d29990d33"
+    }
+  },
+  "original_evidence": {
+    "checksum_covered_payload_bytes": 63334546,
+    "checksum_covered_payload_files": 3936,
+    "manifest_bytes": 578835,
+    "manifest_sha256": "ecd14695ea35ad76cc90331def5b22e96b4c4fd25851d07fd90555588b23aa21",
+    "total_bytes": 63913381,
+    "total_files": 3937
+  },
+  "source_artifacts": {
+    "artifact-format.json": {
+      "bytes": 366318,
+      "sha256": "6d2a9a7ea011eb6ce2eac9f4984f2737f937dd425ad9167864cae61b9e7b68a0"
+    },
+    "artifact-format.md": {
+      "bytes": 3314,
+      "sha256": "766e2bcbeefeb7fbe70da7fa697445283fc474ffa1987a60d1abd3c7c811d387"
+    },
+    "config/views.json": {
+      "bytes": 258,
+      "sha256": "2c7b040336188b53dfefb3a2866ee92b8f2532c00027edb818fe9ebf2fb6ca29"
+    },
+    "environment.json": {
+      "bytes": 2876,
+      "sha256": "c242859af62e22a7a1936f94ec98d1fe14c422e200e0fbb5ed551803e47aa6cc"
+    },
+    "fixture-manifest.json": {
+      "bytes": 2848058,
+      "sha256": "5aa92586492afe15afc8cc461df46c2065ea397faab92910facc1ca35e6a7d20"
+    },
+    "lower-baseline.json": {
+      "bytes": 3035,
+      "sha256": "80913e1164061ee49decf0bd692cd0c2a39940bf572e4f2cd151c1d1d621e8c2"
+    },
+    "lower-final.json": {
+      "bytes": 3059,
+      "sha256": "8750ccd2a11a258ac9a070bd9c0437ebd9993a35238cb13350033c128e1a2032"
+    },
+    "results.jsonl": {
+      "bytes": 13879,
+      "sha256": "5d5be5c62b3b832c083b74bd0483f004efcab4fa479885c5dddbc58e5530a82e"
+    },
+    "runtime/run-fingerprint.json": {
+      "bytes": 9215,
+      "sha256": "f4a2f3343f4488bb46e88e91faa017cb9ad2091cdc8fccd038b783e4edcbb95e"
+    },
+    "scenario-registry.json": {
+      "bytes": 10253,
+      "sha256": "bd89f8787c29183ae466d2d470746fd5b6b18ead8869a404eba12ffae26569f0"
+    }
+  }
+}

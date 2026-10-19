@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::git-repository-shapes",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_empty_repository_can_be_opened_without_enumerating_commits",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_bare_repository_exposes_exact_commits",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_linked_worktree_can_be_opened"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

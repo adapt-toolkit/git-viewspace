@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::readonly-view-state",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_readonly_view_initialization_is_durable_and_idempotent",
+      "tests.test_stage2.Stage2Test.test_completed_init_remains_idempotent_after_readonly_view_creation",
+      "tests.test_stage2.Stage2Test.test_desired_readonly_view_is_restored_by_new_daemon",
+      "tests.test_stage2.Stage2Test.test_public_mount_uses_bind_remount_and_orderly_unmount"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

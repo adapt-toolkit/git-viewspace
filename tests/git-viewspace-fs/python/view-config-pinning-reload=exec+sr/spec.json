@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::view-config-pinning-reload",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_missing_and_invalid_snapshots_are_retried",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_transient_commit_validation_failure_is_retried",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_pinned_view_survives_update_removal_and_corruption",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_pinned_resolution_does_not_reopen_configuration",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_pin_is_per_name_not_a_cached_whole_snapshot",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_names_does_not_pin_a_view",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_names_are_sorted_union_of_pinned_and_current_snapshot",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_names_rereads_every_unpinned_snapshot",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_lock_serializes_first_success_and_only_one_value_is_pinned"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::filesystem-tree-exposure",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:fuse",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_getattr_reports_types_fixed_modes_ownership_and_sizes",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_commit_entries_use_commit_and_author_timestamps",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_nested_paths_and_alias_root_trailing_slash_work",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_repository_files_with_former_metadata_names_are_literal_content",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_early_commit_has_no_synthetic_metadata_entries",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_readlink_preserves_relative_absolute_parent_and_dangling_targets"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

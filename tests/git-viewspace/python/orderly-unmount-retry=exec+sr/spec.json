@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::orderly-unmount-retry",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_orderly_unmount_retries_after_transient_failure",
+      "tests.test_stage2.Stage2Test.test_orderly_unmount_accepts_failed_command_if_mount_is_gone",
+      "tests.test_stage2.Stage2Test.test_orderly_unmount_bounds_persistent_failure",
+      "tests.test_stage2.Stage2Test.test_forceful_stop_uses_immediate_lazy_fallback_without_retry"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

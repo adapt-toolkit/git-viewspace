@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "python::git-viewspace::branch-merge-publication-failures",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_branch_merge_cas_failure_retains_detached_checkout",
+      "tests.test_stage2.Stage2Test.test_branch_merge_generic_publication_failure_retains_detached_checkout"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

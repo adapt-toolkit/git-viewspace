@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::root-handler-contract",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.root_handler_test.RootHandlerTestCase.test_root_contains_only_the_views_namespace",
+      "git_viewspace_fs.tests.root_handler_test.RootHandlerTestCase.test_root_rejects_file_and_symlink_operations"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

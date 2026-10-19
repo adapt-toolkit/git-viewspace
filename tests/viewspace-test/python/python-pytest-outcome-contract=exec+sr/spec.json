@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::python-pytest-outcome-contract",
+  "labels": [],
+  "prerequisites": ["command:python3", "python-module:pytest"],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_pytest_test_inventory.PytestTestInventoryTests.test_runtime_plugin_rejects_nonexecuted_and_xfail_outcomes"
+    ],
+    "cwd": {"anchor": "repository", "path": "."},
+    "environment": {
+      "inherit": ["HOME", "PATH"],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": ["status"],
+    "filesystem": null
+  }
+}

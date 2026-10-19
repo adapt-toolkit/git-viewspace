@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::sync-schema-and-replay",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_sync_report_and_durable_schema_are_strict",
+      "tests.test_stage2.Stage2Test.test_view_sync_validates_replays_records_and_repeats",
+      "tests.test_stage2.Stage2Test.test_view_sync_rejects_wrong_state_and_incomplete_manifest",
+      "tests.test_stage2.Stage2Test.test_sync_uses_one_authoritative_replay_report",
+      "tests.test_stage2.Stage2Test.test_unsupported_upper_fails_without_publishing_sync_state",
+      "tests.test_stage2.Stage2Test.test_invalid_redirect_source_is_rejected_by_authoritative_replay"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

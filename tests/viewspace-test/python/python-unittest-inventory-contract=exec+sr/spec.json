@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::python-unittest-inventory-contract",
+  "labels": [],
+  "prerequisites": [
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_python_test_inventory.PythonTestInventoryTests.test_exact_ids_are_discovered_and_registered_without_importing",
+      "utils.tests.test_python_test_inventory.PythonTestInventoryTests.test_missing_duplicate_and_stale_ids_are_reported_together",
+      "utils.tests.test_python_test_inventory.PythonTestInventoryTests.test_broad_module_and_class_selectors_are_rejected",
+      "utils.tests.test_python_test_inventory.PythonTestInventoryTests.test_unrelated_exec_arguments_cannot_spoof_registration"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

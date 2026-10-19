@@ -1,0 +1,335 @@
+{
+  "format": "viewspace-stage0-results-summary-v1",
+  "source": {
+    "evidence_format": "viewspace-stage0-evidence-v2",
+    "results_jsonl_bytes": 13879,
+    "results_jsonl_sha256": "5d5be5c62b3b832c083b74bd0483f004efcab4fa479885c5dddbc58e5530a82e"
+  },
+  "run_uuid": "956a13f5-26e8-4ebb-8925-5783594d79aa",
+  "gate_status": "pass",
+  "cleanup_clear": true,
+  "format_freeze_limitation": null,
+  "sudo_audit_valid": true,
+  "result_counts": {
+    "pass": 35,
+    "fail": 0,
+    "not_run": 0
+  },
+  "scenarios": [
+    {
+      "scenario_id": "A01",
+      "title": "baseline types and lookup",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/A01/attempts/0001",
+      "duration_ns": 1024882060,
+      "error": null
+    },
+    {
+      "scenario_id": "A02",
+      "title": "missing lookup and demand-driven deep read",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/A02/attempts/0001",
+      "duration_ns": 1090712800,
+      "error": null
+    },
+    {
+      "scenario_id": "B01",
+      "title": "regular create, overwrite, and truncate",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/B01/attempts/0001",
+      "duration_ns": 1733544657,
+      "error": null
+    },
+    {
+      "scenario_id": "B02",
+      "title": "upper executable state transitions",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/B02/attempts/0001",
+      "duration_ns": 2300299112,
+      "error": null
+    },
+    {
+      "scenario_id": "B03",
+      "title": "upper relative and dangling symlinks",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/B03/attempts/0001",
+      "duration_ns": 1725943275,
+      "error": null
+    },
+    {
+      "scenario_id": "B04",
+      "title": "nested upper tree and transient empty directory",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/B04/attempts/0001",
+      "duration_ns": 2979105088,
+      "error": null
+    },
+    {
+      "scenario_id": "B05",
+      "title": "UTF-8 and literal OverlayFS-looking names",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/B05/attempts/0001",
+      "duration_ns": 1783366017,
+      "error": null
+    },
+    {
+      "scenario_id": "C01",
+      "title": "overwrite lower regular",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/C01/attempts/0001",
+      "duration_ns": 1603370694,
+      "error": null
+    },
+    {
+      "scenario_id": "C02",
+      "title": "append then truncate lower regular",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/C02/attempts/0001",
+      "duration_ns": 2204845930,
+      "error": null
+    },
+    {
+      "scenario_id": "C03",
+      "title": "lower regular executable state transitions",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/C03/attempts/0001",
+      "duration_ns": 2352038811,
+      "error": null
+    },
+    {
+      "scenario_id": "C04",
+      "title": "lower symlink replaced by regular",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/C04/attempts/0001",
+      "duration_ns": 1664366714,
+      "error": null
+    },
+    {
+      "scenario_id": "C05",
+      "title": "editor save over lower regular",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/C05/attempts/0001",
+      "duration_ns": 1560630534,
+      "error": null
+    },
+    {
+      "scenario_id": "C06",
+      "title": "ordinary user xattr copy-up",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/C06/attempts/0001",
+      "duration_ns": 2290180809,
+      "error": null
+    },
+    {
+      "scenario_id": "D01",
+      "title": "lower regular deletion",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/D01/attempts/0001",
+      "duration_ns": 1493341452,
+      "error": null
+    },
+    {
+      "scenario_id": "D02",
+      "title": "pure-upper create and deletion",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/D02/attempts/0001",
+      "duration_ns": 1603334503,
+      "error": null
+    },
+    {
+      "scenario_id": "D03",
+      "title": "lower symlink deletion",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/D03/attempts/0001",
+      "duration_ns": 1550238772,
+      "error": null
+    },
+    {
+      "scenario_id": "D04",
+      "title": "lower directory removal and recreation",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/D04/attempts/0001",
+      "duration_ns": 2332344418,
+      "error": null
+    },
+    {
+      "scenario_id": "D05",
+      "title": "representative type transitions at lower regular",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/D05/attempts/0001",
+      "duration_ns": 3333726065,
+      "error": null
+    },
+    {
+      "scenario_id": "E01",
+      "title": "pure-upper regular rename",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E01/attempts/0001",
+      "duration_ns": 1645351543,
+      "error": null
+    },
+    {
+      "scenario_id": "E02",
+      "title": "lower regular rename in parent",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E02/attempts/0001",
+      "duration_ns": 1509452481,
+      "error": null
+    },
+    {
+      "scenario_id": "E03",
+      "title": "lower regular rename across parents",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E03/attempts/0001",
+      "duration_ns": 1596934372,
+      "error": null
+    },
+    {
+      "scenario_id": "E04",
+      "title": "lower regular rename over lower regular",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E04/attempts/0001",
+      "duration_ns": 1609481292,
+      "error": null
+    },
+    {
+      "scenario_id": "E05",
+      "title": "chained lower regular rename",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E05/attempts/0001",
+      "duration_ns": 2288656586,
+      "error": null
+    },
+    {
+      "scenario_id": "E06",
+      "title": "pure-upper populated directory rename",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E06/attempts/0001",
+      "duration_ns": 1824159513,
+      "error": null
+    },
+    {
+      "scenario_id": "E07",
+      "title": "lower directory rename in parent",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E07/attempts/0001",
+      "duration_ns": 1518822570,
+      "error": null
+    },
+    {
+      "scenario_id": "E08",
+      "title": "lower directory redirect, child edits, and second rename",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E08/attempts/0001",
+      "duration_ns": 4169458108,
+      "error": null
+    },
+    {
+      "scenario_id": "E09",
+      "title": "failed rename over nonempty directory",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/E09/attempts/0001",
+      "duration_ns": 1535343930,
+      "error": null
+    },
+    {
+      "scenario_id": "F01",
+      "title": "composite upper survives remount",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/F01/attempts/0001",
+      "duration_ns": 2598256957,
+      "error": null
+    },
+    {
+      "scenario_id": "F02",
+      "title": "composite upper survives GitViewspaceFS replacement",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/F02/attempts/0001",
+      "duration_ns": 2899308008,
+      "error": null
+    },
+    {
+      "scenario_id": "F03",
+      "title": "three orderly process lifecycle cycles",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/F03/attempts/0001",
+      "duration_ns": 3601802751,
+      "error": null
+    },
+    {
+      "scenario_id": "F04",
+      "title": "fsync and syncfs persistence",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/F04/attempts/0001",
+      "duration_ns": 1473614598,
+      "error": null
+    },
+    {
+      "scenario_id": "G01",
+      "title": "ordinary workload access",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/G01/attempts/0001",
+      "duration_ns": 1892275972,
+      "error": null
+    },
+    {
+      "scenario_id": "G02",
+      "title": "primary/secondary lower immutability",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/G02/attempts/0001",
+      "duration_ns": 882545655,
+      "error": null
+    },
+    {
+      "scenario_id": "G03",
+      "title": "same and different commit isolation",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/G03/attempts/0001",
+      "duration_ns": 2876682807,
+      "error": null
+    },
+    {
+      "scenario_id": "G04",
+      "title": "primary/10k bounded structural laziness",
+      "status": "pass",
+      "attempt": 1,
+      "attempt_directory": "scenarios/G04/attempts/0001",
+      "duration_ns": 631339763,
+      "error": null
+    }
+  ]
+}

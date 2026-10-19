@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::public-release",
+  "labels": [],
+  "prerequisites": ["command:python3", "python-module:pygit2"],
+  "config": {
+    "argv": ["python3", "-m", "unittest",
+      "utils.tests.test_public_release.PublicReleaseTests.test_manager_package_metadata",
+      "utils.tests.test_public_release.PublicReleaseTests.test_distributions_ship_notices",
+      "utils.tests.test_public_release.PublicReleaseTests.test_manager_help_uses_public_name",
+      "utils.tests.test_public_release.PublicReleaseTests.test_public_modules_import"],
+    "cwd": {"anchor": "repository", "path": "."},
+    "environment": {"inherit": ["HOME", "PATH"], "set": {
+      "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": "{workspace}",
+      "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs"
+    }},
+    "timeout_seconds": 30,
+    "compare": ["status"],
+    "filesystem": null
+  }
+}

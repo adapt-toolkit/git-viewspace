@@ -1,0 +1,177 @@
+{
+  "format": "viewspace-stage0-fixture-contract-v1",
+  "source": {
+    "expanded_fixture_manifest_bytes": 2848058,
+    "expanded_fixture_manifest_sha256": "5aa92586492afe15afc8cc461df46c2065ea397faab92910facc1ca35e6a7d20",
+    "note": "The 10,013-entry expanded manifest is intentionally omitted; this file is its compact exact generator contract."
+  },
+  "repository": {
+    "commit_identity": "VIEWSPACE Stage 0 <viewspace-stage0@example.invalid>",
+    "config": {
+      "core.autocrlf": false,
+      "core.filemode": true
+    },
+    "initial_branch": "main",
+    "object_format": "sha1"
+  },
+  "commits": {
+    "primary": {
+      "commit": "af1b36e48f66a5213483a82a787fbf54ee555e36",
+      "authored_at": "2026-08-11T19:55:28Z",
+      "committed_at": "2026-08-11T19:55:28Z",
+      "message": "primary fixture",
+      "parents": [],
+      "tree": "da95b087241e9d0e0b09662b11fcf9896dce8ffa"
+    },
+    "secondary": {
+      "commit": "68c5073ec1e74f0a5bdd27f2d16e22781bf74cf9",
+      "authored_at": "2026-08-11T19:55:28Z",
+      "committed_at": "2026-08-11T19:55:28Z",
+      "message": "secondary fixture",
+      "parents": [
+        "af1b36e48f66a5213483a82a787fbf54ee555e36"
+      ],
+      "tree": "2702731d5754c02abbc1678c799d714359d898ba"
+    },
+    "large": {
+      "commit": "a95011dc61b2ee7c9b510526c84cdf9da6aa5a0d",
+      "authored_at": "2026-08-11T19:55:32Z",
+      "committed_at": "2026-08-11T19:55:32Z",
+      "message": "large fixture",
+      "parents": [
+        "68c5073ec1e74f0a5bdd27f2d16e22781bf74cf9"
+      ],
+      "tree": "abc414d0c3d63d736d9bab8d0565323774731bea"
+    }
+  },
+  "primary_tree": {
+    "leaf_count": 12,
+    "leaves": [
+      {
+        "contents_utf8": "deep\n",
+        "git_mode": "100644",
+        "object_id": "4cdb2265d30204be5463b38174b2e8e717982405",
+        "path": "deep/l1/l2/l3/leaf"
+      },
+      {
+        "contents_utf8": "A-a\n",
+        "git_mode": "100644",
+        "object_id": "82e1bb3dd942c089ce3120299739fac32b0c02c5",
+        "path": "dirs/A/a"
+      },
+      {
+        "contents_utf8": "A-b\n",
+        "git_mode": "100644",
+        "object_id": "557054f5e45f41919dc31c85f657818bbbd3abcd",
+        "path": "dirs/A/sub/b"
+      },
+      {
+        "contents_utf8": "B-c\n",
+        "git_mode": "100644",
+        "object_id": "83e74deac5a7b8eddbcc1ac4c11eceafbcb19856",
+        "path": "dirs/B/c"
+      },
+      {
+        "contents_utf8": "#!/bin/sh\nexit 17\n",
+        "git_mode": "100755",
+        "object_id": "71d5e79d1a0bdfe55fe67e1aa6be1d9c0a5edfe0",
+        "path": "files/exec"
+      },
+      {
+        "contents_utf8": "other-v1\n",
+        "git_mode": "100644",
+        "object_id": "5a97c37ae4e957a1112f5aaa2903de453de36384",
+        "path": "files/other"
+      },
+      {
+        "contents_utf8": "plain-v1\n",
+        "git_mode": "100644",
+        "object_id": "ab728a9f991592a496975a9fa888413d44ffef40",
+        "path": "files/plain"
+      },
+      {
+        "git_mode": "120000",
+        "object_id": "2050c51309015cf65b86e480b4d354ff82237eb7",
+        "path": "links/dangling",
+        "target_utf8": "missing-target"
+      },
+      {
+        "git_mode": "120000",
+        "object_id": "416fd2f11980231019dcbb2d6a68cabe462a1c12",
+        "path": "links/relative",
+        "target_utf8": "../files/plain"
+      },
+      {
+        "contents_utf8": "literal-opacity-name\n",
+        "git_mode": "100644",
+        "object_id": "41f3f422550e7eb653d8462b4dfc1baa6104a4d8",
+        "path": "literal/.wh..wh..opq"
+      },
+      {
+        "contents_utf8": "literal-whiteout\n",
+        "git_mode": "100644",
+        "object_id": "38501a334d1e988a2059223a5e5aa56b7e61e443",
+        "path": "literal/.wh.visible"
+      },
+      {
+        "contents_utf8": "unicode\n",
+        "git_mode": "100644",
+        "object_id": "4de4f936336736200e7a59438ef4d31ed10f684d",
+        "path": "unicode/é"
+      }
+    ]
+  },
+  "secondary_delta": {
+    "base": "primary",
+    "leaf_count_after": 13,
+    "removals": [],
+    "replacements_and_additions": [
+      {
+        "contents_utf8": "B-c-second\n",
+        "git_mode": "100644",
+        "object_id": "556577c5a743c583884e2afc69dbe61c289e02b6",
+        "path": "dirs/B/c"
+      },
+      {
+        "contents_utf8": "#!/bin/sh\nexit 31\n",
+        "git_mode": "100755",
+        "object_id": "6ab03dd3a9d20ffdd9a824795aa29465d35926df",
+        "path": "files/exec"
+      },
+      {
+        "contents_utf8": "plain-v2-second-commit\n",
+        "git_mode": "100644",
+        "object_id": "59373faaa4ea5f2349ab64d4a8d432ca68a00413",
+        "path": "files/plain"
+      },
+      {
+        "git_mode": "120000",
+        "object_id": "85f69f254022cffec39a867af971feb68f8c9430",
+        "path": "links/relative",
+        "target_utf8": "../files/other"
+      },
+      {
+        "contents_utf8": "second\n",
+        "git_mode": "100644",
+        "object_id": "e019be006cf33489e2d0177a3837a2384eddebc5",
+        "path": "second-only"
+      }
+    ]
+  },
+  "large_delta": {
+    "base": "secondary",
+    "generated_leaf_count": 10000,
+    "generator": {
+      "bucket_count": 100,
+      "bucket_expression": "index // 100",
+      "contents_expression": "large-{index}\\n",
+      "git_mode": "100644",
+      "index_range": {
+        "end_exclusive": 10000,
+        "start": 0
+      },
+      "path_expression": "large/bucket-{index // 100:03d}/entry-{index:05d}"
+    },
+    "leaf_count_after": 10013
+  }
+}

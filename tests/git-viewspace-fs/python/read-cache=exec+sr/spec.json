@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::read-cache",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "python-module:python3:pygit2",
+    "python-module:python3:fuse"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_read_cache.ReadCacheTests.test_partial_reads_share_content_across_views_and_preserve_versions",
+      "tests.test_read_cache.ReadCacheTests.test_regular_metadata_uses_headers_without_loading_contents",
+      "tests.test_read_cache.ReadCacheTests.test_byte_budget_evicts_lru_not_fifo",
+      "tests.test_read_cache.ReadCacheTests.test_oversized_and_empty_reads_do_not_displace_fitting_content",
+      "tests.test_read_cache.ReadCacheTests.test_zero_disables_retention_and_exact_limit_fits",
+      "tests.test_read_cache.ReadCacheTests.test_failed_content_read_is_not_cached",
+      "tests.test_read_cache.ReadCacheTests.test_prepared_module_uses_own_repository_even_for_identical_blob",
+      "tests.test_read_cache.ReadCacheTests.test_new_instance_starts_cold",
+      "tests.test_read_cache.ReadCacheTests.test_cli_budget_precedence_reaches_real_filesystem",
+      "tests.test_read_cache.ReadCacheTests.test_cache_diagnostics_and_python_limit_validation",
+      "tests.test_read_cache.ReadCacheTests.test_supervisor_snapshots_budget_and_forwards_explicit_argument"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs",
+        "TMPDIR": "{workspace}",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_SYSTEM": "/dev/null"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

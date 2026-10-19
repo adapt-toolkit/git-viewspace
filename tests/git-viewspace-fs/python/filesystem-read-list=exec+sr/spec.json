@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::filesystem-read-list",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:fuse",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_root_and_views_directory_listings_have_only_current_namespaces",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_read_returns_binary_content_with_offset_and_size"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

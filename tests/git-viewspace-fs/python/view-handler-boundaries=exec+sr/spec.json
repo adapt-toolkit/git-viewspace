@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::view-handler-boundaries",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.view_handler_test.ViewHandlerTestCase.test_alias_root_with_trailing_separator_uses_empty_tree_path",
+      "git_viewspace_fs.tests.view_handler_test.ViewHandlerTestCase.test_unknown_alias_is_not_a_view"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

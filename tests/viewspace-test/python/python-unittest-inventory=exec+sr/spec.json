@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::python-unittest-inventory",
+  "labels": [],
+  "prerequisites": [
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/python_test_inventory.py",
+      "--repository",
+      "{repository}",
+      "--test-root",
+      "{repository}/tests"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

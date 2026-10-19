@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::harness-manifests",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test.HarnessTests.test_manifest_is_strict_and_directory_driver_must_agree",
+      "utils.tests.test_viewspace_test.HarnessTests.test_files_directory_is_optional_but_must_not_be_empty_or_a_placeholder",
+      "utils.tests.test_viewspace_test.HarnessTests.test_source_archive_is_the_complete_fixture_tree"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

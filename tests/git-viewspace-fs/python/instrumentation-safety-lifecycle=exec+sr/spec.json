@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::instrumentation-safety-lifecycle",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.instrumentation_test.JsonlInstrumentationTestCase.test_nonempty_and_multiply_linked_logs_are_rejected",
+      "git_viewspace_fs.tests.instrumentation_test.JsonlInstrumentationTestCase.test_owner_identity_and_owner_write_are_required",
+      "git_viewspace_fs.tests.instrumentation_test.JsonlInstrumentationTestCase.test_non_regular_and_symlink_log_targets_are_rejected",
+      "git_viewspace_fs.tests.instrumentation_test.JsonlInstrumentationTestCase.test_close_is_idempotent_and_further_events_are_rejected"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

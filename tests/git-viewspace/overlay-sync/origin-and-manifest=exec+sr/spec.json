@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::overlay-sync::origin-and-manifest",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_overlay_sync.OverlaySyncUnitTests.test_origin_accepts_only_qualified_fuse_and_ext4_profiles",
+      "test_overlay_sync.OverlaySyncUnitTests.test_manifest_rejects_symlink_root"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace/OverlaySync/tests",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

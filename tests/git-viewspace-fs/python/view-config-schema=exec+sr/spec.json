@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::view-config-schema",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_invalid_utf8_is_an_invalid_snapshot",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_malformed_and_trailing_json_are_transactionally_invalid",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_duplicate_view_name_invalidates_entire_snapshot",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_duplicate_parameter_name_invalidates_entire_snapshot",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_top_level_must_be_an_object",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_view_parameters_have_a_strict_schema",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_one_unknown_commit_invalidates_valid_siblings",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_aliases_must_be_single_safe_utf8_components"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

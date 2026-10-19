@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::harness-descendant-cleanup",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test.HarnessTests.test_quiescent_process_reports_and_kills_detached_descendants",
+      "utils.tests.test_viewspace_test.HarnessTests.test_interrupted_wait_kills_and_reaps_the_controlled_process",
+      "utils.tests.test_viewspace_test.HarnessTests.test_process_supervision_does_not_touch_unrelated_children",
+      "utils.tests.test_viewspace_test.HarnessTests.test_supervisor_reaps_adopted_orphans_without_changing_leader_status"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

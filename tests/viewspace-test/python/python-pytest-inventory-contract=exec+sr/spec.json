@@ -1,0 +1,31 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::python-pytest-inventory-contract",
+  "labels": [],
+  "prerequisites": ["command:python3"],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_pytest_test_inventory.PytestTestInventoryTests.test_exact_functions_are_discovered_without_importing",
+      "utils.tests.test_pytest_test_inventory.PytestTestInventoryTests.test_missing_duplicate_stale_and_broad_selectors_are_reported",
+      "utils.tests.test_pytest_test_inventory.PytestTestInventoryTests.test_dynamic_and_inherited_test_shapes_fail_closed",
+      "utils.tests.test_pytest_test_inventory.PytestTestInventoryTests.test_owned_selector_outside_exact_pytest_runner_cannot_spoof_registration",
+      "utils.tests.test_pytest_test_inventory.PytestTestInventoryTests.test_registration_contract_and_collection_configuration_fail_closed"
+    ],
+    "cwd": {"anchor": "repository", "path": "."},
+    "environment": {
+      "inherit": ["HOME", "PATH"],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": ["status"],
+    "filesystem": null
+  }
+}

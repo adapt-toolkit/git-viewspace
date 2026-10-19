@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "runtime::git_viewspace_fs_python313",
+  "labels": ["host", "package", "slow"],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "command:python3.13",
+    "linux",
+    "python-module:python3.13:cffi",
+    "python-module:python3.13:fuse",
+    "python-module:python3.13:pip",
+    "python-module:python3.13:pygit2",
+    "python-module:python3.13:setuptools",
+    "python-module:python3.13:wheel"
+  ],
+  "config": {
+    "argv": ["python3", "{repository}/utils/viewspace_stage17d_viewfs_runtime.py", "{repository}", "python3.13", "3.13"],
+    "cwd": {"anchor": "workspace", "path": "."},
+    "environment": {
+      "inherit": ["PATH"],
+      "set": {
+        "PIP_CONFIG_FILE": "/dev/null",
+        "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+        "PIP_NO_CACHE_DIR": "1",
+        "PIP_NO_INDEX": "1",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONWARNINGS": "error",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 600,
+    "compare": ["status", "stdout", "stderr"],
+    "filesystem": null
+  }
+}

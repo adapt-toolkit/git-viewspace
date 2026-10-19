@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::branch-merge-checked-out-guards",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_branch_merge_dirty_parent_refuses_without_detaching_or_moving_refs",
+      "tests.test_stage2.Stage2Test.test_branch_merge_preserves_typed_branch_and_tip_failures",
+      "tests.test_stage2.Stage2Test.test_branch_merge_checkout_tip_mismatch_refuses_before_detachment",
+      "tests.test_stage2.Stage2Test.test_branch_merge_detach_policy_still_refuses_managed_repository_transition"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

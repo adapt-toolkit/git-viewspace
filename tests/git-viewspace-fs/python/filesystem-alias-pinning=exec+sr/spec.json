@@ -1,0 +1,48 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::filesystem-alias-pinning",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:fuse",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_successful_first_access_pins_an_alias_across_config_changes",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_failed_unpinned_access_is_retried_after_config_becomes_valid",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_valid_alias_is_pinned_even_when_the_requested_child_is_missing"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

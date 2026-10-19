@@ -1,0 +1,16 @@
+{
+  "schema_version": 2, "scope": "basic", "driver": "exec",
+  "selector": "python::git-viewspace::publication-efficiency", "labels": [],
+  "prerequisites": ["command:python3"],
+  "config": {
+    "argv": ["python3", "-m", "unittest",
+      "tests.test_publication.PublicationTests.test_fresh_and_resumed_advance_equivalent_with_fewer_git_commands",
+      "tests.test_publication.PublicationTests.test_fresh_noop_and_manifest_completeness",
+      "tests.test_publication.PublicationTests.test_resumed_stage_and_commit_refuse_stale_index",
+      "tests.test_publication.PublicationTests.test_fresh_sync_still_checks_checkout_before_staging",
+      "tests.test_publication.PublicationTests.test_metadata_cache_exact_identity_independent_results_and_no_availability_cache"],
+    "cwd": {"anchor": "repository", "path": "."},
+    "environment": {"inherit": ["PATH"], "set": {"PYTHONDONTWRITEBYTECODE": "1", "PYTHONPATH": "{repository}/apps/git-viewspace", "TMPDIR": "{workspace}"}},
+    "timeout_seconds": 60, "compare": ["status"], "filesystem": null
+  }
+}

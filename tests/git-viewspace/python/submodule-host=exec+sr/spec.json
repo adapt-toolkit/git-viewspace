@@ -1,0 +1,11 @@
+{
+  "schema_version": 2, "scope": "full", "driver": "exec",
+  "selector": "python::git-viewspace::submodule-host", "labels": ["host", "privileged"],
+  "prerequisites": ["linux", "command:sudo", "command:git-viewspace-fs", "env:VIEWSPACE_WORKSTREAM_SCRATCH", "python-module:pygit2"],
+  "config": {
+    "argv": ["python3", "{repository}/apps/git-viewspace/tests/run-submodule-host.py"],
+    "cwd": {"anchor": "repository", "path": "apps/git-viewspace"},
+    "environment": {"inherit": ["HOME", "PATH", "VIEWSPACE_WORKSTREAM_SCRATCH"], "set": {"PYTHONDONTWRITEBYTECODE": "1", "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs", "TMPDIR": "{workspace}"}},
+    "timeout_seconds": 180, "compare": ["status"], "filesystem": null
+  }
+}

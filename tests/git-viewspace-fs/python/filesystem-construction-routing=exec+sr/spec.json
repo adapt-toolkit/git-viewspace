@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::filesystem-construction-routing",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:fuse",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_constructor_uses_absolute_paths_and_fixed_identity_and_modes",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_constructor_rejects_root_invalid_and_reserved_identity_values",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_handler_routing_is_boundary_aware",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_all_legacy_namespaces_and_their_descendants_are_absent",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_commit_hash_is_not_an_implicit_view_name",
+      "git_viewspace_fs.tests.filesystem_test.GitViewspaceFSTestCase.test_empty_alias_and_repeated_separators_do_not_escape_views"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

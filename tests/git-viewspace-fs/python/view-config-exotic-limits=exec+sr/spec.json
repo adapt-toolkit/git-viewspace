@@ -1,0 +1,46 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::view-config-exotic-limits",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_aliases_at_255_utf8_bytes_are_accepted_verbatim",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_distinct_unicode_spellings_remain_distinct",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_json_integer_limit_failure_is_transactionally_invalid",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_json_recursion_limit_failure_is_transactionally_invalid"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

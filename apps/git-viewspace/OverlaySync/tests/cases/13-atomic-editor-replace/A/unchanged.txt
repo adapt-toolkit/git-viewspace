@@ -1,0 +1,1 @@
+unchanged sibling of atomically replaced document

@@ -1,0 +1,45 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::init-validation",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_init.InitTest.test_init_rejects_overlong_control_socket_path_before_creating_root",
+      "tests.test_init.InitTest.test_dirty_copy_source_is_rejected_before_root_transaction",
+      "tests.test_init.InitTest.test_claimed_source_is_rejected",
+      "tests.test_init.InitTest.test_transforming_attributes_are_rejected",
+      "tests.test_init.InitTest.test_clone_branch_rejects_tag",
+      "tests.test_init.InitTest.test_root_caller_is_rejected",
+      "tests.test_init.InitTest.test_relative_root_and_misapplied_branch_options_are_rejected"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

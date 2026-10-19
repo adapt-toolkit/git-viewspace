@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::view-identity-guards",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_destroy_identity_mismatch_is_side_effect_free",
+      "tests.test_stage2.Stage2Test.test_destroy_protocol_reports_typed_identity_mismatch_without_effect",
+      "tests.test_stage2.Stage2Test.test_identity_guard_rejects_every_existing_view_command_before_dispatch",
+      "tests.test_stage2.Stage2Test.test_recreated_logical_name_rejects_stale_view_identity",
+      "tests.test_stage2.Stage2Test.test_offline_named_status_enforces_view_identity_without_daemon"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

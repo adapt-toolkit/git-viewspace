@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::harness-goldens",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test.HarnessTests.test_golden_update_requires_selection_and_creates_urun_golden",
+      "utils.tests.test_viewspace_test.HarnessTests.test_udir_update_writes_canonical_archive_and_normal_run_reads_it",
+      "utils.tests.test_viewspace_test.HarnessTests.test_expanded_udir_golden_is_read_but_update_normalizes_it"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::view-config-git-objects",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryGitObjectTestCase.test_exact_full_commit_id_is_accepted",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryGitObjectTestCase.test_ref_names_and_abbreviations_are_rejected",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryGitObjectTestCase.test_full_blob_tree_and_tag_object_ids_are_rejected",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryGitObjectTestCase.test_unknown_full_object_id_is_rejected",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryGitObjectTestCase.test_unreachable_exact_commit_object_is_accepted"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

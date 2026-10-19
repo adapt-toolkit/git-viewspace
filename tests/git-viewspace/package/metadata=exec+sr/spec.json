@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "package::git_viewspace",
+  "labels": ["package"],
+  "prerequisites": ["command:python3"],
+  "config": {
+    "argv": ["python3", "-c", "import pathlib,tomllib; p=tomllib.loads(pathlib.Path('pyproject.toml').read_text()); assert p['build-system']['build-backend']=='setuptools.build_meta'; assert p['project']['name']=='git-viewspace'; assert p['project']['version']=='0.1.0'; assert p['project']['scripts']['git-viewspace']=='git_viewspace.cli:main'"],
+    "cwd": {"anchor": "repository", "path": "."},
+    "environment": {"inherit": ["HOME", "PATH"], "set": {"PYTHONDONTWRITEBYTECODE": "1"}},
+    "timeout_seconds": 30,
+    "compare": ["status"],
+    "filesystem": null
+  }
+}

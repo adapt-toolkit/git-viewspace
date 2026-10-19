@@ -1,0 +1,185 @@
+{
+  "format": "viewspace-stage0-qualification-profile-v1",
+  "run": {
+    "cleanup_clear": true,
+    "evidence_format": "viewspace-stage0-evidence-v2",
+    "format_freeze_limitation": null,
+    "gate_status": "pass",
+    "harness_version": "2",
+    "result_counts": {
+      "fail": 0,
+      "not_run": 0,
+      "pass": 35
+    },
+    "run_uuid": "956a13f5-26e8-4ebb-8925-5783594d79aa",
+    "sudo_audit_valid": true
+  },
+  "host": {
+    "architecture": "x86_64",
+    "distribution": "Debian GNU/Linux 13 (trixie)",
+    "distribution_version": "13.6",
+    "glibc": "2.41",
+    "kernel_build": "#1 SMP PREEMPT_DYNAMIC Debian 6.12.96-1 (2026-07-20)",
+    "kernel_release": "6.12.96+deb13-cloud-amd64"
+  },
+  "workload": {
+    "effective_gid": 1003,
+    "effective_uid": 1000,
+    "gid": 1003,
+    "groups": [1003],
+    "locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "uid": 1000,
+    "umask": "0022"
+  },
+  "backing_filesystem": {
+    "block_size": 4096,
+    "fragment_size": 4096,
+    "fstype": "ext4",
+    "name_max": 255,
+    "options": [
+      "rw",
+      "relatime",
+      "discard",
+      "errors=remount-ro"
+    ],
+    "uuid": "a04243ec-b7c4-4a25-bc95-2d1dc1c1b8e5"
+  },
+  "fuse": {
+    "entry_gid": 1003,
+    "entry_uid": 1000,
+    "git_viewspace_fs": "0.2.6+gitviewspacefs.3",
+    "fusepy": "3.0.1",
+    "libfuse_soname": "libfuse.so.2",
+    "mount_gid": 0,
+    "configured_negative_timeout_seconds": 0,
+    "reported_mount_options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "relatime",
+      "allow_other",
+      "default_permissions"
+    ],
+    "mount_uid": 0
+  },
+  "overlayfs": {
+    "accepted_but_unreported_off_options": [
+      "index=off",
+      "metacopy=off",
+      "nfs_export=off",
+      "verity=off",
+      "xino=off"
+    ],
+    "layer_layout": {
+      "lower": "GitViewspaceFS/FUSE",
+      "upper_and_work": "same qualified ext4 filesystem"
+    },
+    "module_parameters": {
+      "check_copy_up": "N",
+      "index": "N",
+      "metacopy": "N",
+      "nfs_export": "N",
+      "redirect_always_follow": "Y",
+      "redirect_dir": "N",
+      "redirect_max": "256",
+      "xino_auto": "N"
+    },
+    "reported_semantic_options": [
+      "redirect_dir=on",
+      "uuid=null"
+    ],
+    "reported_mount_flags": [
+      "rw",
+      "relatime"
+    ],
+    "requested_options": [
+      "redirect_dir=on",
+      "metacopy=off",
+      "index=off",
+      "nfs_export=off",
+      "xino=off",
+      "uuid=null",
+      "verity=off"
+    ],
+    "unrequested_modes": [
+      "userxattr",
+      "volatile"
+    ]
+  },
+  "tools": {
+    "cffi": "2.1.1",
+    "cpython": "3.13.5",
+    "git": "2.47.3",
+    "libgit2": "1.9.6",
+    "pygit2": "1.20.0",
+    "system_executable_sha256": {
+      "findmnt": "369864901af9cbce6ce9fb0b99f334e326afbfd40c07178f8cac468eeb9a8c2a",
+      "git": "356db14e102d68a1a37d8a1ac577dfd678d45d46e92f468bef8b7154e7bfdc60",
+      "mount": "92253cf919646b4a0242998526d35eea39204dff0363e74086290d63ccb39fed",
+      "python3.13": "17b78e0a93175e86f9ac03141924fd7a7f0c0c52e66b34bfa0de20ffef989df1",
+      "sudo": "a59f393bad5037644b89de64fe558ae6d5d1473c25c63022241e7c7019ad2f0c",
+      "umount": "93387d7db63410ac94824d677616a5e36567abe5a724d4e5e71727fea531ffc5"
+    }
+  },
+  "source_binding": {
+    "exact_git_head_at_run": null,
+    "exact_git_head_note": "The evidence did not capture Git HEAD and the run used a dirty working tree; no commit is asserted as the exact run source.",
+    "first_later_stage0_result_commit": {
+      "commit": "a2660621e8d4ebe3c30c37816ef75314270115df",
+      "tree": "53a544b4ccae3ab5f3f45c23eaa6b90f7a859d67"
+    },
+    "later_snapshot_comparison": {
+      "different_file": "stage0/operations.py",
+      "difference": "The run version had one additional terminal blank line.",
+      "later_snapshot_sha256": "2f71241db1052733cf033c751612797009ceb7f6f2a2d135a9a36f7ea7fe299a",
+      "run_sha256": "63ba55c0354fc85029518f2e1ab152aa949da0ed9d7b9aa2340bc404eb344c51"
+    },
+    "path_note": "Historical stage0/ labels are retained because they are the paths fingerprinted by the run; the package now lives at research/OverlayFSStudy/.",
+    "run_fingerprint_sha256": "f4a2f3343f4488bb46e88e91faa017cb9ad2091cdc8fccd038b783e4edcbb95e",
+    "run_source_sha256": {
+      "GitViewspaceFS/git_viewspace_fs/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "GitViewspaceFS/git_viewspace_fs/__main__.py": "11ac7997aadd1e76deb5fa6a4497941fd5b7905b622284f2a37d56af3aae2a18",
+      "GitViewspaceFS/git_viewspace_fs/filesystem.py": "1c35a0323e19cefbd71c949bf234c267725f0157228533cb2192623d8741e1f2",
+      "GitViewspaceFS/git_viewspace_fs/gitoper.py": "85d06b810645d93490d421856050da9997d24fd3f2187beb2b441c4f9770b84a",
+      "GitViewspaceFS/git_viewspace_fs/instrumentation.py": "f3885ae15ffabb64514f44421693df19347bf9698a66b70cb0d87c7214170fc9",
+      "GitViewspaceFS/git_viewspace_fs/view_config.py": "0ceebe94d07361649361799948078becdaec4d7b3777e8385d876d8f601b7e92",
+      "GitViewspaceFS/setup.py": "fbe2c0bc40809b7297a10eea76785411fb88ea3e80fd372011c317a3f5956216",
+      "stage0/__init__.py": "d0a6df1f8c39d052a28366da24a9179783f19d7141ea6420a18304daf1d28d46",
+      "stage0/__main__.py": "55acf34c9254701dd09a01b2e3da1361fd97b3e86ae3fd17679a60057cc98d70",
+      "stage0/evidence.py": "a60577310a1e99db64f0296840db736169eb5d4bef02c75eeb2d1e313eb83e6f",
+      "stage0/fixtures.py": "8a01ed656c2d80cae7188a9778609ef42c460a4eee55fb1c44b33eb9b39b977f",
+      "stage0/mounts.py": "794c388e1d9dfe10f66ed67cb2033c865006573c69e3352045f0317507fd2f92",
+      "stage0/operations.py": "63ba55c0354fc85029518f2e1ab152aa949da0ed9d7b9aa2340bc404eb344c51",
+      "stage0/privileged_capture.py": "0d6887528943d404db03d7b87883d2c431f11b66bd09a01f81b4011fdf622990",
+      "stage0/runner.py": "04bd5e8d17345251fc47bf8e6fa277f9e8b9d5c92a69bbf0643bfe077a745601",
+      "stage0/scenarios.py": "c79cfe1d8807e82dbf2a4f11bc00162f47ac6ee10b0fa62f3a63c7dfe3f93a7d"
+    },
+    "installed_git_viewspace_fs_sha256": {
+      "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "__main__.py": "11ac7997aadd1e76deb5fa6a4497941fd5b7905b622284f2a37d56af3aae2a18",
+      "filesystem.py": "1c35a0323e19cefbd71c949bf234c267725f0157228533cb2192623d8741e1f2",
+      "gitoper.py": "85d06b810645d93490d421856050da9997d24fd3f2187beb2b441c4f9770b84a",
+      "handlers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "handlers/root.py": "8185e9a9070f1cdafcb690c6a807085a4602fe9c1855628bc2a2d609b3a99517",
+      "handlers/view.py": "c2614b0d5c3794f0264903c3995bfed627467e542efb38f60ddd3ae5fd889c55",
+      "instrumentation.py": "f3885ae15ffabb64514f44421693df19347bf9698a66b70cb0d87c7214170fc9",
+      "view_config.py": "0ceebe94d07361649361799948078becdaec4d7b3777e8385d876d8f601b7e92"
+    }
+  },
+  "evidence_binding": {
+    "artifact_format_json_sha256": "6d2a9a7ea011eb6ce2eac9f4984f2737f937dd425ad9167864cae61b9e7b68a0",
+    "artifact_format_markdown_sha256": "766e2bcbeefeb7fbe70da7fa697445283fc474ffa1987a60d1abd3c7c811d387",
+    "environment_json_sha256": "c242859af62e22a7a1936f94ec98d1fe14c422e200e0fbb5ed551803e47aa6cc",
+    "expanded_fixture_manifest_sha256": "5aa92586492afe15afc8cc461df46c2065ea397faab92910facc1ca35e6a7d20",
+    "lower_baseline_sha256": "80913e1164061ee49decf0bd692cd0c2a39940bf572e4f2cd151c1d1d621e8c2",
+    "lower_final_sha256": "8750ccd2a11a258ac9a070bd9c0437ebd9993a35238cb13350033c128e1a2032",
+    "original_evidence_manifest_sha256": "ecd14695ea35ad76cc90331def5b22e96b4c4fd25851d07fd90555588b23aa21",
+    "results_jsonl_sha256": "5d5be5c62b3b832c083b74bd0483f004efcab4fa479885c5dddbc58e5530a82e",
+    "scenario_registry_sha256": "bd89f8787c29183ae466d2d470746fd5b6b18ead8869a404eba12ffae26569f0",
+    "view_config_sha256": "2c7b040336188b53dfefb3a2866ee92b8f2532c00027edb818fe9ebf2fb6ca29"
+  }
+}

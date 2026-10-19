@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::tree-archive-rejection",
+  "labels": [],
+  "prerequisites": [
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_zip_rejects_traversal_and_directory_payloads",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_failed_zip_extraction_cleans_partial_output",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_zip_directory_record_validates_its_local_body",
+      "utils.tests.test_viewspace_test_tree.TreeSupportTests.test_zip_extraction_requires_an_empty_destination_without_deleting_it"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

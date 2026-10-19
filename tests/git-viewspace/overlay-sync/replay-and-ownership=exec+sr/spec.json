@@ -1,0 +1,45 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::overlay-sync::replay-and-ownership",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_overlay_sync.OverlaySyncUnitTests.test_owner_unreadable_regular_is_rejected_before_replay",
+      "test_overlay_sync.OverlaySyncUnitTests.test_git_execute_class_uses_owner_bit_only",
+      "test_overlay_sync.OverlaySyncUnitTests.test_hardlinked_target_fails_without_change_or_residue",
+      "test_overlay_sync.OverlaySyncUnitTests.test_direct_mode_preserves_checkout_dot_git",
+      "test_overlay_sync.OverlaySyncUnitTests.test_replay_begins_only_after_privilege_drop",
+      "test_overlay_sync.OverlaySyncUnitTests.test_emitted_entries_are_naturally_workload_owned_in_both_modes"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace/OverlaySync/tests",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

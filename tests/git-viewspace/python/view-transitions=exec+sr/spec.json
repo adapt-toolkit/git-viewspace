@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::view-transitions",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_stage_commit_clean_and_switch_next_changed_transition",
+      "tests.test_stage2.Stage2Test.test_compound_writable_creation_reports_post_branch_partial_state",
+      "tests.test_stage2.Stage2Test.test_compound_writable_creation_rejects_dangling_symbolic_branch",
+      "tests.test_stage2.Stage2Test.test_compound_init_and_advance_run_one_checked_state_machine_request",
+      "tests.test_stage2.Stage2Test.test_noop_transition_records_next_without_empty_commit"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

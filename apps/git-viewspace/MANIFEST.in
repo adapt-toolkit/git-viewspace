@@ -1,0 +1,4 @@
+include README.md
+recursive-include doc *.md
+recursive-include spec *.md
+include OverlaySync/README.md

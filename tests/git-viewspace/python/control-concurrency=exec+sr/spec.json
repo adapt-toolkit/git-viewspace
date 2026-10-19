@@ -1,0 +1,48 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::control-concurrency",
+  "labels": [],
+  "prerequisites": [
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_control.ControlTests.test_snapshot_remains_responsive_fifo_and_single_owner",
+      "tests.test_control.ControlTests.test_queue_capacity_expiry_and_disconnected_pending_request",
+      "tests.test_control.ControlTests.test_disconnect_after_dispatch_does_not_cancel_or_replay",
+      "tests.test_control.ControlTests.test_stop_and_signal_abandon_queue_but_wait_for_running_operation",
+      "tests.test_control.ControlTests.test_expected_errors_observation_errors_and_fatal_execution",
+      "tests.test_control.ControlTests.test_peer_limit_idle_bad_input_and_identity_guards",
+      "tests.test_control.ControlTests.test_protocol_queue_budget_and_prior_version_rejection",
+      "tests.test_control.ControlTests.test_public_snapshot_during_missing_view_record_and_recovery",
+      "tests.test_control.ControlTests.test_service_cli_preserve_refusal_and_observation_diagnostics",
+      "tests.test_control.ControlTests.test_fallback_shutdown_holds_both_ownership_locks",
+      "tests.test_control.ControlTests.test_slow_supervision_observation_does_not_starve_mutations",
+      "tests.test_control.ControlTests.test_selector_trickling_oversize_and_stalled_reply_are_local"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 45,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

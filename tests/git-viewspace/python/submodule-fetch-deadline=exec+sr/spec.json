@@ -1,0 +1,11 @@
+{
+  "schema_version": 2, "scope": "basic", "driver": "exec",
+  "selector": "python::git-viewspace::submodule-fetch-deadline", "labels": [],
+  "prerequisites": ["command:python3", "command:git"],
+  "config": {
+    "argv": ["python3", "-m", "unittest", "tests.test_submodules.SubmoduleTests.test_fetch_deadline_reaps_owned_process"],
+    "cwd": {"anchor": "repository", "path": "apps/git-viewspace"},
+    "environment": {"inherit": ["HOME", "PATH"], "set": {"PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": "{workspace}"}},
+    "timeout_seconds": 15, "compare": ["status"], "filesystem": null
+  }
+}

@@ -1,0 +1,14 @@
+Git Viewspace
+Copyright 2026 Adapt Framework Solutions
+
+This product includes software derived from RepoFS 0.2.6
+(commit 14b37ecb91fb86cdbe128f78d5b75d9cc65cab31),
+https://github.com/AUEB-BALab/RepoFS
+Copyright 2017–2021 Vitalis Salis and Diomidis Spinellis.
+RepoFS is licensed under the Apache License, Version 2.0.
+Original copyright and license notices are preserved in the source files.
+
+Git Viewspace modifies that filesystem implementation to provide selected
+immutable commit views, shared content caching, and managed view integration.
+The manager and test support code are distributed under Apache-2.0 with the
+copyright holder's authorization. Dependencies retain their own licenses.

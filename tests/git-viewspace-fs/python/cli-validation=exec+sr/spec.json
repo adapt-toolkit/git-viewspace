@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::cli-validation",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:fuse",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_instrumentation_log_cannot_modify_inputs_or_mount_namespace",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_config_is_required",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_mount_identity_arguments_are_required",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_invalid_workload_ids_are_rejected",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_unsafe_or_ambiguous_source_components_are_rejected",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_obsolete_namespace_and_cache_options_are_rejected",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_lexical_repository_and_config_paths_at_or_below_mount_are_rejected",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_real_repository_and_config_paths_below_mount_are_rejected"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

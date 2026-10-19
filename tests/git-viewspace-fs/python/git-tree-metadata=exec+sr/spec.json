@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::git-tree-metadata",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--fixture",
+      "--",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_unreachable_commit_object_is_still_a_valid_commit",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_node_types_cover_all_supported_git_modes",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_directory_contents_cover_root_nested_and_literal_metadata",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_symlink_targets_are_returned_verbatim",
+      "git_viewspace_fs.tests.gitoper_test.GitOperationsTestCase.test_commit_and_author_timestamps_are_exact_and_distinct"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::view-config-source-files",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_config_does_not_have_to_exist_at_initialization",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_empty_snapshot_and_missing_name_are_not_errors_or_pins",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_relative_config_path_is_made_absolute_at_initialization",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_regular_file_is_accepted_and_symlink_to_it_is_accepted",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_retargeting_config_symlink_is_seen_by_an_unpinned_lookup",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_replacing_config_file_is_seen_by_an_unpinned_lookup",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_directory_is_not_treated_as_configuration",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_nonregular_descriptor_is_rejected_before_valid_json_is_read",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_unreadable_file_is_equivalent_to_missing_alias",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_post_open_read_error_is_equivalent_to_missing_alias",
+      "git_viewspace_fs.tests.view_config_test.ViewRegistryTestCase.test_open_uses_nonblocking_mode"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

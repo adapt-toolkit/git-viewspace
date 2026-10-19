@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "python::overlay-sync::root-privilege-tail",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_overlay_sync.OverlaySyncUnitTests.test_root_privilege_drop_clears_groups_then_sets_gid_and_uid",
+      "test_overlay_sync.OverlaySyncUnitTests.test_root_owned_upper_cannot_replay_as_root"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace/OverlaySync/tests",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

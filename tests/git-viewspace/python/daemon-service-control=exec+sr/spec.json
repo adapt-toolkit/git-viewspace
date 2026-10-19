@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace::daemon-service-control",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_stage2.Stage2Test.test_offline_status_and_stop_are_read_only_and_idempotent",
+      "tests.test_stage2.Stage2Test.test_offline_stop_rejects_runtime_residue",
+      "tests.test_stage2.Stage2Test.test_cli_reports_offline_status_as_json",
+      "tests.test_stage2.Stage2Test.test_background_start_is_idempotent_for_running_daemon",
+      "tests.test_stage2.Stage2Test.test_background_start_uses_readiness_handshake"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

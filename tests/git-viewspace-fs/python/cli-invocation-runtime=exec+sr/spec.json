@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "full",
+  "driver": "exec",
+  "selector": "python::git-viewspace-fs::cli-invocation-runtime",
+  "labels": [
+    "host"
+  ],
+  "prerequisites": [
+    "command:python3",
+    "linux",
+    "python-module:python3:cffi",
+    "python-module:python3:fuse",
+    "python-module:python3:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/utils/run_git_viewspace_fs_unittests.py",
+      "{repository}",
+      "{workspace}",
+      "--",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_existing_symlink_arguments_are_passed_as_absolute_not_real_paths",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_optional_instrumentation_log_is_opened_and_closed_around_fuse",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_process_start_time_matches_proc_self_stat",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_loaded_libfuse_identity_is_reported",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_sibling_paths_that_only_share_the_mount_prefix_are_allowed",
+      "git_viewspace_fs.tests.cli_test.CLIInvocationTestCase.test_console_command_stays_in_foreground_for_supervision"
+    ],
+    "cwd": {
+      "anchor": "workspace",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

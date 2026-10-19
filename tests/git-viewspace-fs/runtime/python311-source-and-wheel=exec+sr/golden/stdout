@@ -1,0 +1,5 @@
+Python 3.11: isolated git-viewspace-fs source suite: ok
+Python 3.11: offline wheel build and target install: ok
+Python 3.11: installed metadata and import isolation: ok
+Python 3.11: installed console and module help: ok
+Python 3.11: installed-wheel suite from neutral directory: ok

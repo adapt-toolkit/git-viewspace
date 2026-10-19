@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::overlay-sync::fingerprint-and-publication",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3",
+    "linux"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "test_overlay_sync.OverlaySyncUnitTests.test_upper_fingerprint_binds_regular_bytes",
+      "test_overlay_sync.OverlaySyncUnitTests.test_publication_failure_leaves_target_unchanged"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace/OverlaySync/tests",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}
