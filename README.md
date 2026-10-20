@@ -126,3 +126,10 @@ The filesystem backend derives from RepoFS; dependency licenses remain separate.
 
 To support Adapt Framework Solutions, visit the
 [donation page](https://github.com/adapt-toolkit/ours-donate).
+
+## Additional Information
+
+For a way to connect your agents into a team, check out our other work at [Ours.network](https://ours.network) 
+and [Agent Fleet](https://app.ours.network)
+
+Shout out to our partners at [8Hats](https://8hats.ai) who built [Agent's Co-working](https://agentscoworking.com/)
