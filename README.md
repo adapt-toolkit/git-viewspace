@@ -17,6 +17,11 @@ serializes publication operations so agents do not race on a shared Git index.
 Conflicting edits still require resolution: filesystem separation does not
 make incompatible changes merge automatically.
 
+Result: one view takes a fraction of a second to create, the amount of disk space 
+taken up by a view is roughly proportional to the amount of uncommitted data. You 
+can have hundreds of views for a tiny fraction of the cost of cloning the repo every 
+time. 
+
 ## Requirements and installation
 
 Version 0.1.0 is one installable distribution. It contains separate manager
