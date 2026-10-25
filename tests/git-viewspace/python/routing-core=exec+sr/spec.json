@@ -13,9 +13,11 @@
       "python3",
       "-m",
       "unittest",
+      "tests.test_routing.RoutingTest.test_descriptor_parser_native",
+      "tests.test_routing.RoutingTest.test_subtree_validation_and_module_context",
+      "tests.test_routing.RoutingTest.test_legacy_identity_fault_survives_upgrade",
       "tests.test_routing.RoutingTest.test_protocol_requires_explicit_valid_configuration",
-      "tests.test_routing.RoutingTest.test_missing_backing_preserves_admitted_identity",
-      "tests.test_routing.RoutingTest.test_descriptor_directory_rejected",
+      "tests.test_routing.RoutingTest.test_context_creation_never_walks_or_opens_view",
       "tests.test_routing.RoutingTest.test_reconcile_cleans_private_only_router_residue",
       "tests.test_routing.RoutingTest.test_reconcile_refuses_unowned_private_router_residue"
     ],

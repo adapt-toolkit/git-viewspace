@@ -61,6 +61,77 @@ try:
     )
     vm("view", "start", "test")
     mount = vmroot / "views/test/mnt"
+    # Dynamic declarations: both names visible; only atomic install is allowed.
+    descriptor = mount / ".git-viewspace-#SF#-dynamic"
+    second = root / "second-external"
+    second.write_text("second backing")
+    def install(text):
+        pending = mount / "pending-descriptor"
+        pending.write_text(text)
+        pending.rename(descriptor)
+    def rejected(action, codes):
+        try:
+            action()
+        except OSError as error:
+            assert error.errno in codes, error
+        else:
+            raise AssertionError("operation unexpectedly accepted")
+    install(str(external) + "\n")
+    assert {descriptor.name, "dynamic"} <= set(os.listdir(mount))
+    assert descriptor.read_text() == str(external) + "\n"
+    rejected(lambda: descriptor.write_text(str(second)), {errno.EPERM, errno.EACCES})
+    with (mount / "dynamic").open() as old:
+        install(str(second) + "\n")
+        assert (mount / "dynamic").read_text() == "second backing"
+        assert old.read() == "external baseline"
+    rejected(lambda: install("not an absolute target"), {errno.EINVAL})
+    assert (mount / "dynamic").read_text() == "second backing"
+    (mount / "pending-descriptor").unlink()
+    pending = mount / "pending-descriptor"
+    pending.write_text(str(external) + "\n")
+    with pending.open("r+"):
+        rejected(lambda: pending.rename(descriptor), {errno.EBUSY})
+    os.link(pending, mount / "alias")
+    rejected(lambda: pending.rename(descriptor), {errno.EBUSY})
+    (mount / "alias").unlink()
+    pending.unlink()
+    with (mount / "dynamic").open() as old:
+        (mount / "dynamic").unlink()
+        assert "deleted" in descriptor.read_text()
+        assert not (mount / "dynamic").exists()
+        assert "dynamic" not in os.listdir(mount)
+        assert old.read() == "second backing"
+        assert second.read_text() == "second backing"
+    vm("view", "stop", "test")
+    vm("view", "start", "test")
+    assert not (mount / "dynamic").exists()
+    assert descriptor.exists()
+    install(str(second) + "\n")
+    assert (mount / "dynamic").read_text() == "second backing"
+    descriptor.unlink()
+    assert not (mount / "dynamic").exists()
+    assert second.read_text() == "second backing"
+    receipt["dynamic_descriptor_lifecycle"] = True
+    pages = mount / "pages"
+    pages.mkdir()
+    expected = set()
+    for i in range(700):
+        leaf = f"item-{i:04d}"
+        temp = pages / "pending"
+        temp.write_text(str(second) + "\n")
+        desc = ".git-viewspace-#SF#-" + leaf
+        temp.rename(pages / desc)
+        expected.update((leaf, desc))
+    assert set(os.listdir(pages)) == expected
+    # Readdir must not admit/open external targets. All declarations point to the
+    # same target, which is deliberately absent during enumeration.
+    second.rename(root / "second-moved")
+    assert set(os.listdir(pages)) == expected
+    for item in pages.iterdir():
+        if item.name.startswith(".git-viewspace-#SF#-"):
+            item.unlink()
+    pages.rmdir()
+    receipt["paginated_listing_without_external_access"] = True
     before = external.stat().st_ino
     (mount / "credential").write_text("external update")
     assert external.read_text() == "external update"

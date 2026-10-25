@@ -127,6 +127,7 @@ def _parser():
     routing.add_argument("action", choices=("enable", "disable", "rebind"))
     routing.add_argument("view_name")
     routing.add_argument("--executable")
+    routing.add_argument("--subtree", help="expose only this repository directory in the routed view")
     routing.add_argument("--runtime-dir", action="append", default=[], metavar="VIEW_PATH=EXTERNAL_DIRECTORY")
     _add_view_id_precondition(routing)
     view_init = view_commands.add_parser("init", help="initialize a view")
@@ -391,7 +392,7 @@ def run(argv=None, *, initializer=None):
                 if not separator or path in runtime:
                     raise GitViewspaceError("INVALID_REQUEST", "runtime mapping must be unique VIEW_PATH=EXTERNAL_DIRECTORY")
                 runtime[path] = source
-            payload = view_routing(arguments.root, arguments.view_name, arguments.action, arguments.executable, runtime_directories=runtime if arguments.runtime_dir else None, **_view_id_keywords(arguments))
+            payload = view_routing(arguments.root, arguments.view_name, arguments.action, arguments.executable, runtime_directories=runtime if arguments.runtime_dir else None, subtree=arguments.subtree, **_view_id_keywords(arguments))
         elif arguments.view_command == "start":
             payload = view_start(
                 arguments.root,

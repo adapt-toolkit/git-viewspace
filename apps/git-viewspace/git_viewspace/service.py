@@ -639,6 +639,8 @@ def view_status(root, name=None, *, ensure_view_id=None):
     }
 
 
-def view_routing(root, name, action, executable=None, *, runtime_directories=None, ensure_view_id=None):
+def view_routing(root, name, action, executable=None, *, runtime_directories=None, subtree=None, ensure_view_id=None):
     extra = {} if runtime_directories is None else {"runtime_directories": runtime_directories}
+    if subtree is not None:
+        extra["subtree"] = subtree
     return _existing_view_mutation(root, "view-routing", name, ensure_view_id=ensure_view_id, action=action, executable=executable, **extra)

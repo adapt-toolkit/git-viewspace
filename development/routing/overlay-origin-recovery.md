@@ -15,7 +15,7 @@ requires a different lower-FUSE binding than the present fusepy/libfuse2 stack.
 
 ## Narrow solution under test
 
-Before mounting an existing writable generation, while it is exclusively owned
+When the lower FUSE incarnation or lower revision changes, before mounting an existing writable generation, while it is exclusively owned
 and unmounted, remove only `trusted.overlay.origin` from its upper tree. This
 configuration already fixes index, metacopy, NFS export and xino to off. Full
 copied-up contents therefore reside in the upper tree; directory redirects remain
@@ -69,3 +69,13 @@ fixed: tests locate the CLI through PATH rather than assuming Python's directory
 Unit coverage includes active mount rejection, symlink handling, mutation limited
 to the origin attribute, and failure propagation. Mounted coverage is registered
 as the exhaustive privileged `origin-restart-host` case.
+
+## Same-incarnation remount optimization
+
+`origin-epoch.json` in each upper generation records the unique lower-FUSE source
+UUID, lower commit/alias and upper generation after a successful cleanup. Identical
+epochs skip cleanup. A new lower process has a new source token and therefore still
+requires recovery; manager PID reuse cannot bypass it. An interrupted cleanup does
+not publish the new epoch. Four alternating routed/non-routed daemon restarts with
+three same-daemon remounts each passed the content/redirect/hardlink regression.
+This avoids routine scans but does not eliminate recovery-time upper traversal.

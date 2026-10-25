@@ -42,3 +42,29 @@ routed/direct median ratios of 1.14, 1.06, 0.77 and 1.04 at 4 KiB, 64 KiB, 1 MiB
 and 4 MiB respectively (router-readonly-results.json). The below-one result shows
 cache/scheduling variability, not an architectural speed advantage. These results
 support kernel data passthrough while preserving the explicit metadata overhead.
+
+## Dynamic routing and narrow-view fallback
+
+The dynamic router no longer enumerates descriptor files at startup. A bounded
+positive cache retains at most 256 bindings; open handles retain their own anchors.
+The attempted absent-descriptor cache showed no material benefit and was removed.
+
+`experiments/routing/benchmark_dynamic_startup.py` creates 100-file and 100,000-file
+Git trees from a shared one-byte blob, without materializing the source checkout.
+On this host, three routed starts measured 0.277/0.278/0.259 seconds (100 files)
+and 0.315/0.335/0.306 seconds (100,000 files). Ordinary starts measured
+0.296/0.262/0.214 and 0.416/0.246/0.225 seconds respectively. This establishes that
+startup no longer performs a full namespace walk in this fixture, not a universal
+latency guarantee. Metadata-heavy routed access remains substantially slower:
+warm open/stat/close medians were about 797/793 microseconds versus 69/93 through
+the ordinary view. Runs under concurrent regression load were noisier.
+
+Therefore the optional `--subtree` selection is provided as the authorized fallback:
+route only the session namespace and access large datasets through an ordinary
+view. This confines rather than conceals the metadata penalty. Full-tree checkpoint
+preservation is tested, including pre-existing changes outside the visible subtree.
+
+Origin reset is now skipped on same-lower-incarnation remounts using a durable epoch.
+A new lower incarnation still traverses the changed upper layer for correctness;
+it does not traverse the whole repository. A future lower-FUSE change may eliminate
+that recovery traversal, but no such guarantee is claimed by this workstream.

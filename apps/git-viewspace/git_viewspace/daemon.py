@@ -1316,7 +1316,7 @@ class Daemon:
                 )
             elif command == "view-routing":
                 from .routing import configure
-                response = configure(self, value["view"], value["action"], value["executable"], value.get("runtime_directories"))
+                response = configure(self, value["view"], value["action"], value["executable"], value.get("runtime_directories"), value.get("subtree"))
             elif command == "view-start":
                 response = self.view_start(value["view"])
             elif command == "view-sync":

@@ -51,11 +51,13 @@ def prepare(mounts, view, base, bindings):
     mapping = validate_mapping(view.routing.get("runtime_directories", {}))
     modules = tuple(entries(mounts.context.repository, view.commit))
     prepared = []
+    prefix = view.routing.get("subtree", "")
     for relative, source in sorted(mapping.items()):
+        repository_relative = prefix + "/" + relative if prefix else relative
         if any(
-            relative == m
-            or relative.startswith(m + "/")
-            or m.startswith(relative + "/")
+            repository_relative == m
+            or repository_relative.startswith(m + "/")
+            or m.startswith(repository_relative + "/")
             for m in modules
         ):
             raise GitViewspaceError(
@@ -73,6 +75,9 @@ def prepare(mounts, view, base, bindings):
         path = base
         for part in relative.split("/"):
             path = path / part
+            descriptor = path.with_name(".git-viewspace-#SF#-" + path.name)
+            if os.path.lexists(descriptor):
+                raise GitViewspaceError("INVALID_ROUTING", "runtime destination overlaps a descriptor")
             if path.is_symlink() or not path.is_dir():
                 raise GitViewspaceError(
                     "INVALID_ROUTING",
@@ -95,7 +100,7 @@ def prepare(mounts, view, base, bindings):
                 str(mounts.context.repository),
                 "cat-file",
                 "-s",
-                f"{view.commit}:{relative}/{MARKER}",
+                f"{view.commit}:{repository_relative}/{MARKER}",
             ],
             capture_output=True,
             check=False,

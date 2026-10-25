@@ -328,7 +328,11 @@ the destroyed `view_id`.
 
 `view routing enable NAME --executable ABSOLUTE_HELPER [--runtime-dir RELATIVE=ABSOLUTE]...`
 configures a stopped view. `view routing disable NAME` removes that configuration;
-`view routing rebind NAME` explicitly accepts current external file identities.
+`view routing rebind NAME` clears prior admissions; subsequent access lazily admits external identities.
 The optional `--ensure-view-id ID` guard prevents targeting a recreated view.
 See [routing](routing.md) for descriptor format, installation, supported operations,
 readonly behavior and recovery constraints.
+
+Routing can optionally select `--subtree REPOSITORY_PATH`. The public mount exposes
+that directory's contents, while advance still commits the underlying full-tree
+overlay. Runtime paths are relative to the selected root. See [routing.md](routing.md).

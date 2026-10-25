@@ -38,6 +38,7 @@ subprocess.run(
         *cflags,
         str(Path(__file__).with_name("router.cc")),
         *libs,
+        "-lcrypto",
         "-o",
         str(a.output),
     ],

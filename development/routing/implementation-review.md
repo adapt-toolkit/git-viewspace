@@ -69,3 +69,23 @@ is not implied by filesystem acceptance.
 The Python 3.13 source-and-wheel matrix case subsequently passed after installing
 its missing build dependencies. Python 3.11, 3.12 and 3.14 were unavailable on this
 host and remain unqualified by this run.
+
+## Dynamic routing and subtree follow-up
+
+Independent read-only review required and verified these changes:
+
+- Serialize namespace checks and mutations against descriptor installation; reject
+  open or hardlinked rename sources so no writable alias survives admission.
+- Directory listing parses local descriptors without opening/admitting backing files;
+  retain a correct per-directory pagination snapshot and serialize shared-handle use.
+- Use declaration-based admitted identity across directory moves; unreadable identity
+  records fail closed. Preserve legacy admitted identities and faults on upgrade.
+- Distinguish runtime roots from protected ancestors so sibling descriptors work.
+- Origin reset epochs include unique lower-FUSE incarnation, revision/alias and upper
+  generation, and are persisted only after successful cleanup.
+- Narrow public routing roots preserve the full underlying overlay/commit. Runtime
+  marker checks retain repository prefixes; submodule-root selection is rejected.
+- Append helper diagnostics with attempt timestamps rather than overwrite on restart.
+
+The final read-only pass found no additional routing correctness blocker. Regression
+and benchmark results are recorded separately; review does not substitute for them.

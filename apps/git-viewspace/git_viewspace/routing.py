@@ -22,6 +22,25 @@ from .storage import (
 PREFIX = ".git-viewspace-#SF#-"
 
 
+def validate_subtree(value):
+    if value is None:
+        return
+    if (not isinstance(value, str) or not value or value.startswith("/")
+            or "\0" in value or any(p in ("", ".", "..", ".git") for p in value.split("/"))):
+        raise GitViewspaceError("INVALID_ROUTING", "subtree must be a relative directory path")
+
+
+def selected_source(view, base):
+    subtree = view.routing.get("subtree")
+    validate_subtree(subtree)
+    selected = base
+    for part in subtree.split("/") if subtree else ():
+        selected = selected / part
+        if selected.is_symlink() or not selected.is_dir():
+            raise GitViewspaceError("INVALID_ROUTING", "subtree must have real directory components")
+    return selected
+
+
 def private_view(view):
     return replace(view, mountpoint=view.path / "routing" / "source", routing=None)
 
@@ -38,6 +57,7 @@ def facts(view):
     return {
         "runtime": status(view),
         "enabled": view.routing is not None,
+        "subtree": (view.routing or {}).get("subtree"),
         "private_mounted": mount_at(directory / "source") is not None,
         "process_alive": bool(
             running and process_matches(running["pid"], running["start_time_ticks"])
@@ -83,142 +103,50 @@ def observe(mounts, view, source, observed=None):
     return actual
 
 
-def _bindings(mounts, view, base, previous=None):
+def _table(mounts, view, base):
+    """Only immutable context, never an inventory of descriptor files.
+
+    Descriptors are resolved by the router adjacent to requested names. Startup
+    cost here depends on declared submodules, not the size of the view tree.
+    """
     from .submodules import entries
 
-    modules = tuple(entries(mounts.context.repository, view.commit))
-    found = {}
-    root = mounts.context.root.resolve()
-    for parent, dirs, files in os.walk(base):
-        # Git paths do not contain literal .git administrative directories.
-        if any(n.startswith(PREFIX) for n in dirs):
-            raise GitViewspaceError(
-                "INVALID_ROUTING_DESCRIPTOR", "descriptor must be a regular file"
-            )
-        dirs[:] = [n for n in dirs if n != ".git"]
-        for filename in files:
-            if not filename.startswith(PREFIX):
-                continue
-            descriptor = Path(parent) / filename
-            relative = descriptor.relative_to(base).as_posix()
-            leaf = filename[len(PREFIX) :]
-            if not leaf or leaf in (".", "..") or leaf.startswith(PREFIX):
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_DESCRIPTOR", "invalid routed basename"
-                )
-            if any(relative == m or relative.startswith(m + "/") for m in modules):
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_DESCRIPTOR",
-                    "bindings inside submodules are unsupported",
-                )
-            if not stat.S_ISREG(descriptor.lstat().st_mode):
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_DESCRIPTOR", "descriptor must be a regular file"
-                )
-            with descriptor.open("rb") as stream:
-                raw = stream.read(4097)
-            try:
-                target_text = raw.decode("utf-8").removesuffix("\n")
-            except UnicodeError as error:
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_DESCRIPTOR", "descriptor must be UTF-8"
-                ) from error
-            if (
-                len(raw) > 4096
-                or "\n" in target_text
-                or "\0" in target_text
-                or not Path(target_text).is_absolute()
-            ):
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_DESCRIPTOR",
-                    "descriptor must contain one absolute path",
-                )
-            target = Path(target_text)
-            visible = descriptor.with_name(leaf)
-            if os.path.lexists(visible):
-                raise GitViewspaceError(
-                    "ROUTING_COLLISION", "ordinary path conflicts with routed name"
-                )
-            key = "/" + visible.relative_to(base).as_posix()
-            if (
-                previous is not None
-                and key in previous
-                and previous[key]["target"] == target_text
-            ):
-                # Preserve admitted identity even when its pathname disappears or changes.
-                # The native router faults only this binding; ordinary files stay usable.
-                found[key] = previous[key]
-                continue
-            if target.is_symlink() or target.resolve().is_relative_to(root):
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_TARGET",
-                    "backing file must be external and not a symlink",
-                )
-            try:
-                metadata = target.stat()
-            except OSError as error:
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_TARGET",
-                    "backing file unavailable",
-                    detail=str(error),
-                ) from error
-            if not stat.S_ISREG(metadata.st_mode):
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_TARGET", "backing file must be regular"
-                )
-            fs = filesystem_at(target).filesystem_type
-            if fs.startswith("fuse") or fs == "overlay":
-                raise GitViewspaceError(
-                    "INVALID_ROUTING_TARGET",
-                    "recursive/stacked backing files are unsupported",
-                )
-            found[key] = {
-                "target": str(target),
-                "device": metadata.st_dev,
-                "inode": metadata.st_ino,
-                "fault": hashlib.sha256(key.encode()).hexdigest() + ".fault",
-            }
-    return found
-
-
-def _table(mounts, view, base):
     directory = view.path / "routing"
-    record = directory / "bindings.json"
-    previous = None
-    if record.exists():
-        validate_stable_file(record, mounts.context.uid, mounts.context.gid)
-        previous = read_json(record)
-    current = _bindings(mounts, view, base, previous)
-    if previous is not None:
-        if set(previous) != set(current) or any(
-            previous[k]["target"] != current[k]["target"] for k in current
-        ):
-            raise GitViewspaceError(
-                "ROUTER_REBIND_REQUIRED",
-                "bindings changed; explicitly rebind the stopped view",
-            )
-        current = (
-            previous  # Keep the originally admitted identity; the router validates it.
-        )
-    else:
-        atomic_json(record, current)
-    payload = bytearray()
-    for key, value in sorted(current.items()):
-        for token in (
-            key,
-            value["target"],
-            str(value["device"]),
-            str(value["inode"]),
-            value["fault"],
-        ):
-            payload.extend(token.encode() + b"\0")
-    table = directory / "bindings.nul"
-    table.write_bytes(payload)
+    legacy = directory / "bindings.json"
+    if legacy.exists():
+        # One-time conversion of already-admitted identities, not rediscovery.
+        # Preserve faults across upgrades; an upgrade must not silently rebind.
+        validate_stable_file(legacy, mounts.context.uid, mounts.context.gid)
+        for path, record in read_json(legacy).items():
+            target = record["target"]
+            key = hashlib.sha256((target + "\n").encode()).hexdigest()
+            identity = directory / (key + ".identity")
+            payload = f"{record['device']} {record['inode']}\n".encode()
+            if not identity.exists():
+                atomic_write(identity, payload)
+            elif identity.read_bytes() != payload:
+                atomic_write(directory / (key + ".fault"), b"Legacy identities disagree; explicit rebind required\n")
+            fault = record["fault"]
+            if Path(fault).name != fault:
+                raise GitViewspaceError("INVALID_STATE", "invalid legacy fault path")
+            if (directory / fault).exists():
+                atomic_write(directory / (key + ".fault"), (directory / fault).read_bytes())
+        legacy.rename(directory / "bindings.migrated.json")
+        fsync_directory(directory)
+    table = view.path / "routing/context.nul"
+    fields = [str(mounts.context.root.resolve())]
+    prefix = view.routing.get("subtree", "") if view.routing else ""
+    for path in entries(mounts.context.repository, view.commit):
+        if prefix and (prefix == path or prefix.startswith(path + "/")):
+            raise GitViewspaceError("INVALID_ROUTING", "selected subtree cannot be inside a submodule")
+        if not prefix or path.startswith(prefix + "/"):
+            fields.append("/" + (path[len(prefix)+1:] if prefix else path))
+    table.write_bytes(b"".join(item.encode() + b"\0" for item in fields))
     table.chmod(0o600)
     return table
 
 
-def configure(daemon, name, action, executable, runtime_directories=None):
+def configure(daemon, name, action, executable, runtime_directories=None, subtree=None):
     view = daemon.store.get(name)
     if (
         view.desired_started
@@ -251,15 +179,16 @@ def configure(daemon, name, action, executable, runtime_directories=None):
             raise GitViewspaceError(
                 "INVALID_ROUTER", "cannot execute router", detail=str(error)
             ) from error
-        if version.stdout.strip() != "git-viewspace-router 1":
+        if version.stdout.strip() != "git-viewspace-router 2":
             raise GitViewspaceError("INVALID_ROUTER", "unsupported router protocol")
         directory.mkdir(mode=0o700, exist_ok=True)
         (directory / "source").mkdir(mode=0o700, exist_ok=True)
         from .runtime_mounts import validate_mapping
 
         mapping = validate_mapping(runtime_directories or {})
+        validate_subtree(subtree)
         view = replace(
-            view, routing={"executable": str(binary), "runtime_directories": mapping}
+            view, routing={"executable": str(binary), "runtime_directories": mapping, **({"subtree": subtree} if subtree else {})}
         )
     elif action == "disable":
         view = replace(view, routing=None)
@@ -271,6 +200,7 @@ def configure(daemon, name, action, executable, runtime_directories=None):
         for path in [
             directory / "bindings.json",
             directory / "bindings.nul",
+            *directory.glob("*.identity"),
             directory / "uncertain",
             *directory.glob("*.fault"),
         ]:
@@ -300,11 +230,12 @@ def start(mounts, view, source):
     mounts.start(base, source)
     process = None
     try:
-        table = _table(mounts, view, base.mountpoint)
+        selected = selected_source(view, base.mountpoint)
+        table = _table(mounts, view, selected)
         from . import runtime_mounts
 
         prepared = runtime_mounts.prepare(
-            mounts, view, base.mountpoint, read_json(directory / "bindings.json")
+            mounts, view, selected, {}
         )
         protected = directory / "protected.nul"
         protected.write_bytes(
@@ -316,7 +247,7 @@ def start(mounts, view, source):
             "-n",
             "--",
             view.routing["executable"],
-            str(base.mountpoint),
+            str(selected),
             str(view.mountpoint),
             str(table),
             str(directory),
@@ -326,7 +257,10 @@ def start(mounts, view, source):
             "gvr-" + view.view_id,
             str(protected),
         ]
-        with (directory / "stderr.log").open("wb") as log:
+        with (directory / "stderr.log").open("ab") as log:
+            log.write(f"\nrouter attempt started at {time.time():.6f}\n".encode())
+            log.flush()
+            os.fsync(log.fileno())
             process = subprocess.Popen(
                 argv,
                 stdin=subprocess.DEVNULL,

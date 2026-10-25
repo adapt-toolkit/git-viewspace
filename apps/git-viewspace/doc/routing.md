@@ -9,7 +9,7 @@ This is a filesystem integration feature, not a security boundary.
 ## Install the optional helper
 
 The base Python installation is unchanged. Routing additionally requires a C++17
-compiler, pkg-config, libfuse 3.17 or newer development headers/runtime, and a Linux
+compiler, pkg-config, OpenSSL development headers/libcrypto, libfuse 3.17 or newer development headers/runtime, and a Linux
 kernel with FUSE passthrough support (Linux 6.9 or newer). It requires privileged
 mount and passthrough operations. The helper deliberately fails if passthrough is
 unavailable; it does not silently substitute userspace copying for ordinary data.
@@ -39,10 +39,38 @@ Its contents are one absolute external filename, optionally followed by a newlin
 /private/agents/alice/credentials.json
 ```
 
-The external regular file must already exist. The descriptor appears in the routed
-view as `.credentials.json`; reads and writes access its external backing file.
-The descriptor itself is hidden in that view. Git stores the descriptor and its
-path, **not the backing contents**. Descriptor paths are consequently not secrets.
+Both the descriptor and its virtual filename `.credentials.json` appear in the
+view. Git stores the descriptor and path, **not the backing contents**. Descriptor
+paths are consequently not secrets. Resolution is lazy: starting the router never
+walks the view or requires a list of routed files.
+
+Read descriptors normally. To install or replace one while mounted, write its
+contents into an ordinary temporary file, close every handle/mapping, then rename
+that file atomically onto the descriptor path. Direct descriptor creation, writing
+and truncation are rejected. Invalid installation preserves the old descriptor;
+hardlinked or still-open source files are rejected. Only ordinary rename and
+RENAME_NOREPLACE are supported for descriptor installation. Editing the private
+underlying tree behind a running router is unsupported.
+
+Unlinking a virtual target atomically rewrites its descriptor as:
+
+```text
+/private/agents/alice/credentials.json
+deleted
+```
+
+The descriptor stays visible; the virtual name disappears. **The external file
+is untouched.** Replacing the descriptor with an active declaration revives the
+name. Deleting the descriptor itself removes routing, also leaving external data
+untouched. Already-open target handles retain their original backing object.
+Descriptor rename-away to an ordinary filename and virtual target rename/hardlinks
+are rejected; replacing a descriptor with another valid descriptor is allowed.
+
+Declarations are UTF-8, at most 4096 bytes. The only optional second line is
+`deleted`; a trailing newline is optional. Listing a directory reads only its own
+descriptors, never external targets. Invalid descriptors remain visible for repair;
+accessing their virtual names reports errors. Real/virtual name collisions are
+errors rather than ordinary-file fallback.
 
 Enable routing while the view is stopped:
 
@@ -54,8 +82,8 @@ git-viewspace --root "$ROOT" view start agent-a
 ```
 
 The helper pins the external device/inode. In-place writes are immediately visible;
-rename-over replacement, deletion and special-file hardlinks through the view are
-rejected. Replacement or disappearance through the external path latches ESTALE
+rename-over replacement and special-file hardlinks through the view are
+rejected; virtual deletion changes only the descriptor. Replacement or disappearance through the external path latches ESTALE
 for that binding. Ordinary files remain usable. The fault survives view restart.
 After deliberately checking the new backing file, stop the view and use:
 
@@ -64,7 +92,10 @@ git-viewspace --root "$ROOT" view routing rebind agent-a
 git-viewspace --root "$ROOT" view start agent-a
 ```
 
-Rebind accepts the current identities for all descriptors. A failed helper exit
+Rebind clears prior admissions; targets are admitted lazily on their next access.
+Identical active declarations share an admitted identity within a view, including
+after directory moves. Reinstalling identical contents does not clear a backing
+fault. Selecting a different target creates a different admission. A failed helper exit
 can require rebind even if no individual fault record survived. A replacement manager leaves uncertain views stopped so that its control
 interface remains available for rebind. Merely restarting does not silently
 accept replacement credentials. Device/inode reuse after all
@@ -127,12 +158,40 @@ A partial startup may leave owned runtime records. The normal stop/recovery path
 uses recorded mount identities. An unrecorded or replaced mount requires operator
 inspection; recovery does not guess ownership. Per-view routing state and helper
 stderr reside under the view's private `routing/` directory, outside Git. Do not
-edit these records while the daemon is active.
+edit these records while the daemon is active. Helper stderr is appended with a
+timestamped attempt boundary, not overwritten on restart. Operational records and
+logs are retained for the view lifetime and removed when the view is destroyed;
+archive needed diagnostics before retiring the view.
 
-Writable view restart also clears stale OverlayFS origin handles while the upper
-layer is unmounted. See the [restart recovery rationale](../../../development/routing/overlay-origin-recovery.md).
+When the lower FUSE incarnation or lower revision changes, writable view restart
+clears stale OverlayFS origin handles while the upper layer is unmounted. Ordinary
+remounts against the same lower incarnation skip that scan using a durable epoch. See the [restart recovery rationale](../../../development/routing/overlay-origin-recovery.md).
 
 For measured ordinary data/metadata costs and remaining qualification boundaries,
 see [routing performance](../../../development/routing/performance.md). Passthrough
 avoids userspace copying of ordinary data but does not eliminate FUSE metadata
 roundtrips; workloads dominated by opening many tiny files have higher overhead.
+
+## Narrow routed views
+
+For session-oriented routing alongside a large dataset, expose only a subtree:
+
+```sh
+git-viewspace --root "$ROOT" view routing enable agent-a \
+  --executable "$HOME/.local/bin/git-viewspace-router" \
+  --subtree agents/alice --runtime-dir runtime=/private/agents/alice/runtime
+```
+
+The public view root now shows the contents of `agents/alice`. Paths in runtime
+mappings are relative to that public root; their markers must be committed under
+the corresponding repository prefix. The subtree must exist with no symlink
+components and cannot lie inside a submodule. Descendant submodules remain readonly.
+Enabling routing again replaces the configuration; omitting --subtree exposes the
+full tree again. Stop applications before changing this selection.
+
+The private overlay and commit remain whole-repository: advance preserves and
+commits existing changes outside the visible subtree as well. Status reports the
+selection. Use a separate ordinary non-routed view for large-data access. This
+confines routing overhead; it does not accelerate routed metadata operations or
+provide a security sandbox. Filesystem access outside the public mount is not
+restricted by subtree selection.

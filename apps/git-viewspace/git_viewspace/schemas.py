@@ -438,6 +438,10 @@ def validate_view_config(value):
     if "routing" in value:
         keys = (*keys, "routing")
         routing_keys = ("executable", "runtime_directories") if "runtime_directories" in value["routing"] else ("executable",)
+        if "subtree" in value["routing"]:
+            routing_keys = (*routing_keys, "subtree")
+            from .routing import validate_subtree
+            validate_subtree(value["routing"]["subtree"])
         _object(value["routing"], routing_keys, "routing configuration")
         from .runtime_mounts import validate_mapping
         validate_mapping(value["routing"].get("runtime_directories", {}))

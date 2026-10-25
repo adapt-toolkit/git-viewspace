@@ -185,7 +185,7 @@ def load_views(root, root_uuid, manager_state, uid, gid):
                 raise GitViewspaceError("INVALID_STATE", f"overlay generation set is invalid: {name}")
             generation = generations / generation_id
             _directory(generation, uid, gid, {0o700})
-            if {entry.name for entry in generation.iterdir()} != {"generation.json", "upper", "work"}:
+            if {entry.name for entry in generation.iterdir()} - {"origin-epoch.json"} != {"generation.json", "upper", "work"}:
                 raise GitViewspaceError("INVALID_STATE", f"overlay generation is invalid: {name}")
             upper = generation / "upper"
             work = generation / "work"
@@ -898,15 +898,25 @@ class ViewMounts:
             paths = (alias_path, view.upper_path, view.work_path, view.mountpoint)
             if any("," in str(path) or ":" in str(path) for path in paths):
                 raise GitViewspaceError("INVALID_OVERLAY", "OverlayFS paths must not contain comma or colon")
-            # libfuse2 lower handles can be reused after daemon restart. With
-            # indexing/metacopy/export disabled, origins are optional identity
-            # metadata; preserve the upper contents and redirects, not old handles.
-            self._command(
-                (self.sudo, "-n", "--", "/usr/bin/python3", "-I",
-                 str(Path(__file__).with_name("overlay_origin.py").resolve()),
-                 str(view.upper_path)),
-                "OVERLAY_ORIGIN_RESET_FAILED", "cannot reset stopped overlay origins",
-            )
+            # Lower FUSE handles may change when its incarnation changes. A
+            # normal remount against the same lower must not scan the upper.
+            epoch = {"source": source, "commit": view.commit,
+                     "alias": view.alias, "generation": view.generation_id}
+            record = view.generation_path / "origin-epoch.json"
+            prior = None
+            if record.exists():
+                validate_stable_file(record, self.context.uid, self.context.gid)
+                prior = read_json(record)
+            if prior != epoch:
+                self._command(
+                    (self.sudo, "-n", "--", "/usr/bin/python3", "-I",
+                     str(Path(__file__).with_name("overlay_origin.py").resolve()),
+                     str(view.upper_path)),
+                    "OVERLAY_ORIGIN_RESET_FAILED", "cannot reset stopped overlay origins",
+                )
+                # Publish only after the full reset succeeds. Interrupted cleanup
+                # retains the old epoch and is safely repeated on restart.
+                atomic_json(record, epoch)
             options = ",".join(
                 (
                     f"lowerdir={alias_path}",

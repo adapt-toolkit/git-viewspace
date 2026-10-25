@@ -147,6 +147,17 @@ try:
         i = 10 + cycle % 10
         expected[i] = f"cycle-{cycle}"
         (m / f"dir{i}/file").write_text(expected[i])
+        epoch = upper.parent / "origin-epoch.json"
+        before_epoch = epoch.stat().st_mtime_ns
+        for remount in range(3):
+            vm("view", "stop", "test")
+            vm("view", "start", "test")
+            assert epoch.stat().st_mtime_ns == before_epoch, "same lower rescanned"
+            # Change lookup order and exercise fresh lower lookups between mounts.
+            for j in reversed(indices):
+                folder = "renamed" if j == 0 else f"dir{j}"
+                assert (m / folder / "file").read_text() == expected[j]
+            assert (m / "nested-moved/leaf").read_text() == "nested-lower-only"
         vm("view", "stop", "test")
         vm("stop")
         rows.append(

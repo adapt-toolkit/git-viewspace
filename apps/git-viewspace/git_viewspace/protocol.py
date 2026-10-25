@@ -90,6 +90,12 @@ def validate_request(value):
         if value["action"] != "enable":
             raise GitViewspaceError("INVALID_REQUEST", "runtime directories apply only to enable")
         actual_fields.discard("runtime_directories")
+    if command == "view-routing" and "subtree" in value:
+        from .routing import validate_subtree
+        validate_subtree(value["subtree"])
+        if value["action"] != "enable":
+            raise GitViewspaceError("INVALID_REQUEST", "subtree applies only to enable")
+        actual_fields.discard("subtree")
     if "queue_timeout_seconds" in value:
         budget = value["queue_timeout_seconds"]
         if (

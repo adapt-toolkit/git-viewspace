@@ -14,6 +14,56 @@ from git_viewspace.routing import PREFIX, _table
 
 
 class RoutingTest(unittest.TestCase):
+    def test_descriptor_parser_native(self):
+        import shutil
+        import subprocess
+        compiler = shutil.which("c++")
+        if not compiler:
+            self.skipTest("C++17 compiler unavailable")
+        source = Path(__file__).resolve().parents[2] / "git-viewspace-router/test_descriptor.cc"
+        with tempfile.TemporaryDirectory() as tmp:
+            binary = Path(tmp) / "descriptor-test"
+            subprocess.run([compiler, "-std=c++17", "-Wall", "-Wextra", str(source), "-o", str(binary)], check=True, capture_output=True)
+            subprocess.run([str(binary)], check=True, capture_output=True)
+
+    def test_subtree_validation_and_module_context(self):
+        from git_viewspace.routing import validate_subtree, selected_source
+        for value in ("/absolute", "../escape", "a//b", ".", "a/.git"):
+            with self.assertRaises(GitViewspaceError):
+                validate_subtree(value)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "routing").mkdir()
+            (root / "session").mkdir()
+            (root / "alias").symlink_to(root / "session", target_is_directory=True)
+            view = SimpleNamespace(path=root, commit="a" * 40, routing={"subtree": "session"})
+            self.assertEqual(selected_source(view, root), root / "session")
+            mounts = SimpleNamespace(context=SimpleNamespace(root=root, repository=root))
+            with patch("git_viewspace.submodules.entries", return_value={"session/tools": "x", "unrelated": "y"}):
+                self.assertEqual(_table(mounts, view, root).read_bytes(), str(root).encode() + b"\0/tools\0")
+            view.routing = {"subtree": "alias"}
+            with self.assertRaises(GitViewspaceError):
+                selected_source(view, root)
+
+    def test_legacy_identity_fault_survives_upgrade(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            directory = root / "routing"
+            directory.mkdir()
+            legacy = {"/credential": {"target": "/external", "device": 11, "inode": 22, "fault": "old.fault"}}
+            (directory / "bindings.json").write_text(json.dumps(legacy))
+            (directory / "bindings.json").chmod(0o600)
+            (directory / "old.fault").write_text("old error")
+            view = SimpleNamespace(path=root, commit="a" * 40, routing={})
+            mounts = SimpleNamespace(context=SimpleNamespace(root=root, repository=root, uid=os.getuid(), gid=os.getgid()))
+            with patch("git_viewspace.submodules.entries", return_value={}):
+                _table(mounts, view, root / "unused")
+            key = hashlib.sha256(b"/external\n").hexdigest()
+            self.assertEqual((directory / (key + ".identity")).read_text(), "11 22\n")
+            self.assertEqual((directory / (key + ".fault")).read_text(), "old error")
+            self.assertTrue((directory / "bindings.migrated.json").exists())
+
     def test_protocol_requires_explicit_valid_configuration(self):
         for action in ("disable", "rebind"):
             validate_request(
@@ -43,55 +93,19 @@ class RoutingTest(unittest.TestCase):
                     )
                 )
 
-    def test_missing_backing_preserves_admitted_identity(self):
+    def test_context_creation_never_walks_or_opens_view(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            managed = root / "managed"
-            managed.mkdir()
-            base = managed / "base"
-            base.mkdir()
-            viewpath = managed / "view"
-            (viewpath / "routing").mkdir(parents=True)
-            external = root / "external"
-            external.write_text("external-only")
-            (base / (PREFIX + "credential")).write_text(str(external) + "\n")
-            view = SimpleNamespace(path=viewpath, commit="a" * 40)
-            context = SimpleNamespace(
-                root=managed, repository=managed, uid=os.getuid(), gid=os.getgid()
-            )
-            mounts = SimpleNamespace(context=context)
-            with patch("git_viewspace.submodules.entries", return_value={}):
-                _table(mounts, view, base)
-                original = (viewpath / "routing/bindings.json").read_bytes()
-                external.unlink()
-                _table(mounts, view, base)
-                self.assertEqual(
-                    original, (viewpath / "routing/bindings.json").read_bytes()
-                )
-                external.write_text("replacement")
-                _table(mounts, view, base)
-                self.assertEqual(
-                    original, (viewpath / "routing/bindings.json").read_bytes()
-                )
-                (base / "credential").write_text("collision")
-                with self.assertRaises(GitViewspaceError):
-                    _table(mounts, view, base)
-
-    def test_descriptor_directory_rejected(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            base = Path(tmp)
-            (base / (PREFIX + "invalid")).mkdir()
-            from git_viewspace.routing import _bindings
-
-            with patch("git_viewspace.submodules.entries", return_value={}):
-                with self.assertRaises(GitViewspaceError):
-                    _bindings(
-                        SimpleNamespace(
-                            context=SimpleNamespace(root=base, repository=base)
-                        ),
-                        SimpleNamespace(commit="a" * 40),
-                        base,
-                    )
+            (root / "routing").mkdir()
+            view = SimpleNamespace(path=root, commit="a" * 40, routing={})
+            context = SimpleNamespace(root=root, repository=root)
+            with (
+                patch("git_viewspace.submodules.entries", return_value={"code": "unused"}),
+                patch("os.walk", side_effect=AssertionError("whole-view scan")),
+            ):
+                table = _table(SimpleNamespace(context=context), view, root / "nonexistent-view")
+                self.assertEqual(table.read_bytes(), str(root).encode() + b"\0/code\0")
+                self.assertFalse((root / "routing/bindings.json").exists())
 
     def test_reconcile_cleans_private_only_router_residue(self):
         from git_viewspace.daemon import Daemon
