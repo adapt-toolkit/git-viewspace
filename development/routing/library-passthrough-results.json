@@ -1,0 +1,326 @@
+[
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 3.3,
+    "p95_us": 4.59,
+    "MiB_s": 944.2699623806876
+  },
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 3.28,
+    "p95_us": 4.451,
+    "MiB_s": 1001.7000800334323
+  },
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 4.34,
+    "p95_us": 5.47,
+    "MiB_s": 826.5154405250597
+  },
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 4.58,
+    "p95_us": 5.72,
+    "MiB_s": 773.0162942434948
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 16.2205,
+    "p95_us": 20.429,
+    "MiB_s": 3668.297190530417
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 15.67,
+    "p95_us": 19.19,
+    "MiB_s": 3835.0338998588586
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 27.13,
+    "p95_us": 35.48,
+    "MiB_s": 2170.1851811491765
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 29.18,
+    "p95_us": 40.111,
+    "MiB_s": 1944.0822230446468
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 311.89,
+    "p95_us": 417.88,
+    "MiB_s": 3299.1365912105557
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 327.69,
+    "p95_us": 408.8,
+    "MiB_s": 2980.0629911808114
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 473.995,
+    "p95_us": 572.841,
+    "MiB_s": 2076.3315324652444
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 376.675,
+    "p95_us": 514.681,
+    "MiB_s": 2552.9464173692368
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 2.54,
+    "p95_us": 3.3,
+    "MiB_s": 1352.420265340384
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 2.54,
+    "p95_us": 3.32,
+    "MiB_s": 1354.6433445873972
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 3.751,
+    "p95_us": 4.52,
+    "MiB_s": 948.9718550435015
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 3.46,
+    "p95_us": 4.41,
+    "MiB_s": 1020.460944004418
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 21.84,
+    "p95_us": 26.45,
+    "MiB_s": 2743.6433989366515
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 15.94,
+    "p95_us": 21.29,
+    "MiB_s": 3617.566393051309
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 25.88,
+    "p95_us": 31.82,
+    "MiB_s": 2344.1043699781317
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 25.57,
+    "p95_us": 32.33,
+    "MiB_s": 2356.0510603888433
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 312.955,
+    "p95_us": 419.39,
+    "MiB_s": 3067.693331593951
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 314.315,
+    "p95_us": 372.13,
+    "MiB_s": 3124.7356180723145
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 464.61,
+    "p95_us": 771.7,
+    "MiB_s": 1965.5403175004105
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 490.145,
+    "p95_us": 688.92,
+    "MiB_s": 2017.2653505092856
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 2.49,
+    "p95_us": 3.27,
+    "MiB_s": 1391.484512562159
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 2.98,
+    "p95_us": 4.21,
+    "MiB_s": 1086.2813522234203
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 3.78,
+    "p95_us": 4.82,
+    "MiB_s": 925.4870302691811
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 3.96,
+    "p95_us": 5.02,
+    "MiB_s": 880.2703830057845
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 20.73,
+    "p95_us": 24.749,
+    "MiB_s": 2896.5336849256632
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 21.33,
+    "p95_us": 26.56,
+    "MiB_s": 2782.832019131636
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 32.19,
+    "p95_us": 39.32,
+    "MiB_s": 1879.6734697412871
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 27.76,
+    "p95_us": 36.83,
+    "MiB_s": 2120.5754207982213
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "overlay",
+    "median_us": 325.9845,
+    "p95_us": 397.38,
+    "MiB_s": 2991.7443562425574
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 232.9355,
+    "p95_us": 297.82,
+    "MiB_s": 4205.465267058855
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "overlay",
+    "median_us": 391.2505,
+    "p95_us": 553.73,
+    "MiB_s": 2449.668718642556
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 470.915,
+    "p95_us": 701.49,
+    "MiB_s": 2013.2754510825016
+  }
+]
