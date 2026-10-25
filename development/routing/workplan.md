@@ -31,3 +31,19 @@
 
 Work remains active until the optional installed router, regression/benchmark
 results, independent reviews, documentation and remote PR are all verified.
+
+## Reviewed runtime-directory amendment
+
+Add manager-owned external directory bind mounts above the router using the narrow
+contract in specification.md. Independent reviewer accepted this approach with an
+empty tracked marker, explicit mount ownership/recovery, readonly child remounts,
+and the existing protected-directory mechanism. Adopted all listed constraints;
+no extra forwarding layer or generalized virtual-special-file machinery.
+
+Tests: sockets in both directions, readonly writes rejected while socket connects
+remain possible, marker-only commits, protected ancestor rename, busy stop, partial
+start cleanup, foreign mount rejection, restart recovery, and no leaked mounts.
+
+Applications must qualify their own credential persistence and checkpoint
+behavior. Filesystem acceptance does not establish a particular harness
+compatibility guarantee.

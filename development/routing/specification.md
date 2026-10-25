@@ -155,8 +155,11 @@ submit a PR with evidence and any deliberate limitations.
   generation/filehandle recovery system is added.
 - Special-file supported operations are open/read/write, getattr, truncate,
   chmod/chown subject to normal owner permissions, timestamps, flush and fsync.
-  Reject special-file hardlinks, rename/unlink, allocation, ioctl, explicit advisory
-  locks and cross-file optimized-copy operations. No special-file mmap coherence
+  Reject special-file hardlinks, rename/unlink, allocation, ioctl, flock and cross-file optimized-copy operations. POSIX record locks
+  are local to the FUSE mount: they do not coordinate separate views or direct
+  opens of the external file. Applications requiring such coordination are
+  unsupported. Ordinary files retain the kernel FUSE record-lock behavior needed
+  by applications such as SQLite. No special-file mmap coherence
   guarantee. Ordinary metadata and handle behavior remain separate.
 - Open-file registration ownership is distinct from names: rename/unlink/recreate
   must not attach a new file to an old registration. The high-level library's open
@@ -169,3 +172,39 @@ submit a PR with evidence and any deliberate limitations.
   existing ownership checks; do not add a second daemon-management framework.
 - Benchmark metadata/open costs with zero and many bindings to detect table scans
   or unrelated locking overhead. Successful ordinary access never persists state.
+
+## Amendment: external runtime directories
+
+Optional runtime directory bindings complement pinned regular files. They are
+manager-owned Linux bind mounts above the public router, not FUSE forwarding of
+socket inodes. Each maps a normalized relative destination to an existing absolute
+external directory. Configure only while stopped. The destination must contain
+exactly one tracked empty `.git-viewspace-runtime` marker and no other entries;
+Git cannot retain an empty directory. Validate the actual underlying tree at each
+start. The runtime mount hides the marker, and commits retain only that marker.
+
+Reject root destinations, dot/dot-dot or symlink components, overlapping targets,
+submodule destinations, intersections with regular-file bindings, sources inside
+the managed root, FUSE/OverlayFS sources, and sources containing subordinate mounts.
+Use nonrecursive binds. Do not create external directories or copy their contents.
+
+Start the base and router first, install and verify runtime mounts, then report
+ready. Applications must wait for start success. Stop runtime mounts before the
+router and base. Record mount identities for recovery; never unmount a foreign
+replacement. Partial-start cleanup removes only owned mounts. Busy normal unmount
+remains an error. Status includes runtime mounts even if the public router vanished.
+Protect destination ancestors from rename/replacement using the router's existing
+protected-directory mechanism.
+
+Each runtime bind is nosuid,nodev and inherits the view's filesystem-readonly
+setting. A readonly parent alone does not make a child bind readonly; remount and
+verify its flags. Readonly prevents filesystem changes through the view, not Unix
+socket communication or external effects of that communication. Views are not
+security isolation boundaries.
+
+Runtime directories use native filesystem semantics: changes are immediately
+visible, while a mounted source directory remains its original inode if its
+external pathname is replaced. No pinned-file fault/rebind logic applies to these
+directories. Deliberate application copies outside the runtime mount are ordinary
+files and may be committed. This amendment supersedes the original directory-map
+exclusion only for these explicit manager-owned runtime mounts.

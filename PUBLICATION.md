@@ -48,3 +48,20 @@ Before distributing a new version:
    dependencies retain their own terms.
 5. Publish versioned artifacts and checksums deliberately. A source commit does
    not imply a package-index release or a security certification.
+
+## Optional routing qualification
+
+The routing branch adds an optional separately built native helper; it does not
+bundle libfuse or replace the two existing Python entry points. See
+[routing installation and limitations](apps/git-viewspace/doc/routing.md).
+
+The 2026-10-25 Linux/Python 3.13 qualification passed 118 registered cases with
+zero failures, plus a clean 39-case basic run. Four interpreter-matrix cases were
+skipped for missing prerequisites, not counted as successful coverage. Independent
+review, real mounted failure/recovery tests, a fresh installed-package check and
+random-I/O measurements are recorded under development/routing. This is not an
+independent security audit or proof of every possible crash interleaving.
+
+The Python 3.13 source-and-wheel matrix case subsequently passed after installing
+its missing build dependencies. Python 3.11, 3.12 and 3.14 were unavailable on this
+host and remain unqualified by this run.

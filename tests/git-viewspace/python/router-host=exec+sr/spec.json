@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "python::git-viewspace::router-host",
+  "labels": [
+    "host",
+    "privileged"
+  ],
+  "prerequisites": [
+    "linux",
+    "command:sudo",
+    "command:git-viewspace-fs",
+    "env:VIEWSPACE_WORKSTREAM_SCRATCH",
+    "python-module:pygit2",
+    "command:git-viewspace",
+    "env:VIEWSPACE_ROUTER_BIN"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/apps/git-viewspace/tests/run-router-host.py"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "apps/git-viewspace"
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH",
+        "VIEWSPACE_WORKSTREAM_SCRATCH",
+        "VIEWSPACE_ROUTER_BIN"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 240,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

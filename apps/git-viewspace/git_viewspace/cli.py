@@ -24,6 +24,7 @@ from .service import (
     view_init_overlay,
     view_init_readonly,
     view_start,
+    view_routing,
     view_stage,
     view_status,
     view_stop,
@@ -122,6 +123,12 @@ def _parser():
         required=True,
         parser_class=_Parser,
     )
+    routing = view_commands.add_parser("routing", help="configure optional external-file routing on a stopped view")
+    routing.add_argument("action", choices=("enable", "disable", "rebind"))
+    routing.add_argument("view_name")
+    routing.add_argument("--executable")
+    routing.add_argument("--runtime-dir", action="append", default=[], metavar="VIEW_PATH=EXTERNAL_DIRECTORY")
+    _add_view_id_precondition(routing)
     view_init = view_commands.add_parser("init", help="initialize a view")
     view_init_kinds = view_init.add_subparsers(
         dest="view_kind",
@@ -377,6 +384,14 @@ def run(argv=None, *, initializer=None):
                     from_branch=arguments.from_branch,
                     new_branch=arguments.new_branch,
                 )
+        elif arguments.view_command == "routing":
+            runtime = {}
+            for item in arguments.runtime_dir:
+                path, separator, source = item.partition("=")
+                if not separator or path in runtime:
+                    raise GitViewspaceError("INVALID_REQUEST", "runtime mapping must be unique VIEW_PATH=EXTERNAL_DIRECTORY")
+                runtime[path] = source
+            payload = view_routing(arguments.root, arguments.view_name, arguments.action, arguments.executable, runtime_directories=runtime if arguments.runtime_dir else None, **_view_id_keywords(arguments))
         elif arguments.view_command == "start":
             payload = view_start(
                 arguments.root,

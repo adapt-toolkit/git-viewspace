@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::overlay-origin",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_overlay_origin.OriginResetTest.test_rejects_active_overlay_and_submount",
+      "tests.test_overlay_origin.OriginResetTest.test_visits_symlinks_without_following_and_changes_only_origin",
+      "tests.test_overlay_origin.OriginResetTest.test_failure_aborts_and_root_symlink_is_rejected"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

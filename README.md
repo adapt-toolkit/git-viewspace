@@ -111,6 +111,7 @@ cleanup, and individual publication commands.
 - [Daemon and recovery](apps/git-viewspace/doc/daemon.md)
 - [Behavior and limitations](apps/git-viewspace/doc/behavior.md)
 - [Service supervision](apps/git-viewspace/doc/service.md)
+- [External files and runtime directories](apps/git-viewspace/doc/routing.md)
 - [Submodule support](SUBMODULES.md)
 - [Troubleshooting](apps/git-viewspace/doc/operations.md)
 - [Development and testing](CONTRIBUTING.md)

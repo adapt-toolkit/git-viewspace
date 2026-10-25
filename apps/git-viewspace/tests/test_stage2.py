@@ -2205,7 +2205,10 @@ class Stage2Test(unittest.TestCase):
             state["redirect"] = set()
             self.assertFalse(mounts.start(view, source))
             self.assertFalse(mounts.stop(view, source))
-        command = state["commands"][0]
+        cleanup = state["commands"][0]
+        self.assertEqual(cleanup[-1], str(view.upper_path))
+        self.assertTrue(cleanup[-2].endswith("overlay_origin.py"))
+        command = state["commands"][1]
         self.assertIn("overlay", command)
         options = command[command.index("-o") + 1]
         for option in (

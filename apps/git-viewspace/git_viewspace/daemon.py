@@ -216,14 +216,28 @@ class Daemon:
         public_mounted = [
             view for view in self.store.views.values() if mount_at(view.mountpoint) is not None
         ]
-        if public_mounted and previous is None:
+        routed_residue = []
+        from .routing import facts as routing_facts
+        for view in self.store.views.values():
+            if view.routing is not None or (view.path / "routing").exists():
+                routing = routing_facts(view)
+                if (routing["private_mounted"] or routing["process_alive"]
+                    or routing["runtime"]["record_present"] or routing["runtime"]["mounted_paths"]
+                    or (view.path / "routing/running.json").exists()):
+                    routed_residue.append(view)
+        if (public_mounted or routed_residue) and previous is None:
             raise GitViewspaceError("FOREIGN_MOUNT", "public view mount has no matching runtime record")
-        if public_mounted:
+        if public_mounted or routed_residue:
             self.mounts.cleanup_all(
                 self.store.views,
                 previous["viewfs"]["source"],
                 force=True,
             )
+        # Recovery requiring operator rebind must not prevent the control
+        # daemon from starting. Preserve the fault and leave that view stopped.
+        for view in list(self.store.views.values()):
+            if view.routing is not None and (view.path / "routing/uncertain").exists():
+                self.store.set_desired(view.name, False)
         if mounted is not None:
             if previous is None:
                 raise GitViewspaceError("FOREIGN_MOUNT", "private mount has no matching runtime record")
@@ -505,6 +519,11 @@ class Daemon:
             "healthy": (mounted is not None) == view.desired_started,
             "mountpoint": str(view.mountpoint),
         }
+        if view.routing is not None:
+            from .routing import facts
+            value["routing"] = facts(view)
+            if value["routing"]["faults"] or value["routing"]["requires_rebind"]:
+                value["healthy"] = False
         if view.kind == "overlay":
             value.update(
                 {
@@ -1295,6 +1314,9 @@ class Daemon:
                     from_branch=value.get("from_branch"),
                     new_branch=value.get("new_branch"),
                 )
+            elif command == "view-routing":
+                from .routing import configure
+                response = configure(self, value["view"], value["action"], value["executable"], value.get("runtime_directories"))
             elif command == "view-start":
                 response = self.view_start(value["view"])
             elif command == "view-sync":

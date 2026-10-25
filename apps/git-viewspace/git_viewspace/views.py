@@ -1,5 +1,6 @@
 """Durable view definitions, overlay generations, and public mounts."""
 
+import errno
 import os
 import shutil
 import stat
@@ -47,6 +48,7 @@ class View:
     config_path: Path
     state_path: Path
     mountpoint: Path
+    routing: dict | None = None
 
     @property
     def kind(self):
@@ -118,12 +120,13 @@ def load_views(root, root_uuid, manager_state, uid, gid):
         mountpoint = view_path / "mnt"
         _directory(view_path, uid, gid, {0o700})
         view_entries = {entry.name for entry in view_path.iterdir()}
-        if view_entries not in ({"config", "state", "mnt"}, {"config", "state", "mnt", "overlay"}):
+        if view_entries - {"routing"} not in ({"config", "state", "mnt"}, {"config", "state", "mnt", "overlay"}):
             raise GitViewspaceError("INVALID_STATE", f"view contains an unexplained entry: {name}")
+        if "routing" in view_entries:
+            _directory(view_path / "routing", uid, gid, {0o700})
         _directory(config_directory, uid, gid, {0o700})
         _directory(state_directory, uid, gid, {0o700})
         mounted = mount_at(mountpoint)
-        _directory(mountpoint, uid, gid, {0o755} if mounted is not None else {0o700})
         if {entry.name for entry in config_directory.iterdir()} != {"view.json"}:
             raise GitViewspaceError("INVALID_STATE", f"view configuration directory is invalid: {name}")
         if {entry.name for entry in state_directory.iterdir()} != {"state.json"}:
@@ -142,6 +145,21 @@ def load_views(root, root_uuid, manager_state, uid, gid):
             or state["view_id"] != config["view_id"]
         ):
             raise GitViewspaceError("INVALID_STATE", f"view identity is inconsistent: {name}")
+        try:
+            _directory(mountpoint, uid, gid, {0o755} if mounted is not None else {0o700})
+        except OSError as error:
+            # A dead router cannot answer lstat. Defer only this known owned
+            # mount to reconciliation; it validates the runtime record and
+            # unmounts before the underlying directory is checked again.
+            if not (
+                error.errno == errno.ENOTCONN
+                and config.get("routing") is not None
+                and mounted is not None
+                and mounted.filesystem_type == "fuse.git-viewspace-router"
+                and mounted.source == "gvr-" + config["view_id"]
+                and mounted.root == "/"
+            ):
+                raise
         writable = config["kind"] == "overlay"
         if writable != ("overlay_base" in state) or writable != ("overlay" in view_entries):
             raise GitViewspaceError("INVALID_STATE", f"view writable state is inconsistent: {name}")
@@ -232,6 +250,7 @@ def load_views(root, root_uuid, manager_state, uid, gid):
             config_path=config_path,
             state_path=state_path,
             mountpoint=mountpoint,
+            routing=config.get("routing"),
         )
     transitioning = [
         view
@@ -295,6 +314,8 @@ class ViewStore:
             "commit": view.commit,
             "alias": view.alias,
         }
+        if view.routing is not None:
+            value["routing"] = view.routing
         if view.branch is not None:
             value["branch"] = view.branch
         return value
@@ -785,6 +806,9 @@ class ViewMounts:
         return f"/views/{view.alias}"
 
     def observe(self, view, source, observed=None):
+        if view.routing is not None:
+            from .routing import observe
+            return observe(self, view, source, observed)
         mounted = (
             mount_at(view.mountpoint)
             if observed is None
@@ -851,6 +875,9 @@ class ViewMounts:
         self._source(view)
 
     def start(self, view, source):
+        if view.routing is not None:
+            from .routing import start
+            return start(self, view, source)
         if self.observe(view, source) is not None:
             return True
         from .submodules import require_available
@@ -871,6 +898,15 @@ class ViewMounts:
             paths = (alias_path, view.upper_path, view.work_path, view.mountpoint)
             if any("," in str(path) or ":" in str(path) for path in paths):
                 raise GitViewspaceError("INVALID_OVERLAY", "OverlayFS paths must not contain comma or colon")
+            # libfuse2 lower handles can be reused after daemon restart. With
+            # indexing/metacopy/export disabled, origins are optional identity
+            # metadata; preserve the upper contents and redirects, not old handles.
+            self._command(
+                (self.sudo, "-n", "--", "/usr/bin/python3", "-I",
+                 str(Path(__file__).with_name("overlay_origin.py").resolve()),
+                 str(view.upper_path)),
+                "OVERLAY_ORIGIN_RESET_FAILED", "cannot reset stopped overlay origins",
+            )
             options = ",".join(
                 (
                     f"lowerdir={alias_path}",
@@ -963,6 +999,9 @@ class ViewMounts:
                 time.sleep(UNMOUNT_RETRY_INTERVAL_SECONDS)
 
     def stop(self, view, source, *, force=False):
+        if view.routing is not None:
+            from .routing import stop
+            return stop(self, view, source, force=force)
         if self.observe(view, source) is None:
             return True
         self._stop_modules(view, source, force=force)

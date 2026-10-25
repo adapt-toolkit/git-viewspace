@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::runtime-mounts-core",
+  "labels": [],
+  "prerequisites": [
+    "command:git",
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_runtime_mounts.RuntimeMountTest.test_mapping_rejects_ambiguous_paths",
+      "tests.test_runtime_mounts.RuntimeMountTest.test_malformed_durable_record_is_rejected",
+      "tests.test_runtime_mounts.RuntimeMountTest.test_foreign_mount_id_is_rejected_before_access",
+      "tests.test_runtime_mounts.RuntimeMountTest.test_failed_remount_retains_ownership_and_busy_stop_retains_record",
+      "tests.test_runtime_mounts.RuntimeMountTest.test_unrecorded_runtime_mount_is_never_unmounted"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 30,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

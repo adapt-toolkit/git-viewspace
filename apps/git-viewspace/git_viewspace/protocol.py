@@ -18,6 +18,7 @@ VIEW_ID_GUARDED_COMMANDS = frozenset(
     {
         "view-init-overlay",
         "view-start",
+        "view-routing",
         "view-stop",
         "view-sync",
         "view-stage",
@@ -61,6 +62,7 @@ def validate_request(value):
         "view-init-overlay": {"protocol", "command", "view", "branch"},
         "view-init-and-start": None,
         "view-start": {"protocol", "command", "view"},
+        "view-routing": {"protocol", "command", "view", "action", "executable"},
         "view-stop": {"protocol", "command", "view"},
         "view-sync": {"protocol", "command", "view"},
         "view-stage": {"protocol", "command", "view"},
@@ -72,7 +74,22 @@ def validate_request(value):
         "view-deinit-overlay": {"protocol", "command", "view"},
         "view-destroy": {"protocol", "command", "view", "discard"},
     }
+    if command == "view-routing":
+        if value.get("action") not in {"enable", "disable", "rebind"}:
+            raise GitViewspaceError("INVALID_REQUEST", "invalid routing action")
+        executable = value.get("executable")
+        if value["action"] == "enable":
+            if not isinstance(executable, str) or not executable.startswith("/") or "\0" in executable:
+                raise GitViewspaceError("INVALID_REQUEST", "enable requires an absolute router executable")
+        elif executable is not None:
+            raise GitViewspaceError("INVALID_REQUEST", "executable applies only to enable")
     actual_fields = set(value)
+    if command == "view-routing" and "runtime_directories" in value:
+        from .runtime_mounts import validate_mapping
+        validate_mapping(value["runtime_directories"])
+        if value["action"] != "enable":
+            raise GitViewspaceError("INVALID_REQUEST", "runtime directories apply only to enable")
+        actual_fields.discard("runtime_directories")
     if "queue_timeout_seconds" in value:
         budget = value["queue_timeout_seconds"]
         if (

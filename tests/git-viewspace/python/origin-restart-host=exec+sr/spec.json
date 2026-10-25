@@ -1,0 +1,45 @@
+{
+  "schema_version": 2,
+  "scope": "exhaustive",
+  "driver": "exec",
+  "selector": "python::git-viewspace::origin-restart-host",
+  "labels": [
+    "host",
+    "privileged"
+  ],
+  "prerequisites": [
+    "linux",
+    "command:sudo",
+    "command:git-viewspace-fs",
+    "env:VIEWSPACE_WORKSTREAM_SCRATCH",
+    "python-module:pygit2",
+    "command:git-viewspace"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "{repository}/apps/git-viewspace/tests/run-origin-restart-host.py"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "apps/git-viewspace"
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH",
+        "VIEWSPACE_WORKSTREAM_SCRATCH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 240,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

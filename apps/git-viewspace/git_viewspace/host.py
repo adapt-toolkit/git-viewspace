@@ -19,6 +19,7 @@ class Mount:
     source: str
     mount_options: frozenset[str]
     super_options: frozenset[str]
+    mount_id: int | None = None
 
 
 def process_start_time_ticks(pid=None):
@@ -71,7 +72,7 @@ def mounts(path="/proc/self/mountinfo"):
             super_options = frozenset(fields[separator + 3].split(","))
         except (ValueError, IndexError) as error:
             raise GitViewspaceError("MOUNTINFO_UNAVAILABLE", "invalid Linux mount table") from error
-        result.append(Mount(mountpoint, root, filesystem_type, source, mount_options, super_options))
+        result.append(Mount(mountpoint, root, filesystem_type, source, mount_options, super_options, int(fields[0])))
     return tuple(result)
 
 

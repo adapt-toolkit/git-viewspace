@@ -221,6 +221,15 @@ def offline_status(context):
             "healthy": observation is None,
             "mountpoint": str(view.mountpoint),
         }
+        if view.routing is not None or (view.path / "routing").exists():
+            from .routing import facts as routing_facts
+            value["routing"] = routing_facts(view)
+            if value["routing"]["private_mounted"] or value["routing"]["process_alive"] or value["routing"]["runtime"]["mounted_paths"]:
+                value["healthy"] = False
+                issues.append(f"router runtime remains: {view.name}")
+            if value["routing"]["faults"] or value["routing"]["requires_rebind"]:
+                value["healthy"] = False
+                issues.append(f"router requires attention: {view.name}")
         if view.kind == "overlay":
             tip = git.resolve_local_branch(context.repository, view.branch)
             value.update(
@@ -628,3 +637,8 @@ def view_status(root, name=None, *, ensure_view_id=None):
         "views": views,
         "view": views[0] if name is not None else None,
     }
+
+
+def view_routing(root, name, action, executable=None, *, runtime_directories=None, ensure_view_id=None):
+    extra = {} if runtime_directories is None else {"runtime_directories": runtime_directories}
+    return _existing_view_mutation(root, "view-routing", name, ensure_view_id=ensure_view_id, action=action, executable=executable, **extra)

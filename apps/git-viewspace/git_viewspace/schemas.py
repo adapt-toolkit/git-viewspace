@@ -435,6 +435,16 @@ def validate_view_config(value):
     )
     if value["kind"] == "overlay":
         keys = (*keys, "branch")
+    if "routing" in value:
+        keys = (*keys, "routing")
+        routing_keys = ("executable", "runtime_directories") if "runtime_directories" in value["routing"] else ("executable",)
+        _object(value["routing"], routing_keys, "routing configuration")
+        from .runtime_mounts import validate_mapping
+        validate_mapping(value["routing"].get("runtime_directories", {}))
+        binary = value["routing"]["executable"]
+        _string(binary, "router executable")
+        if not binary.startswith("/") or "\0" in binary:
+            raise GitViewspaceError("INVALID_STATE", "router executable must be an absolute path")
     _object(value, keys, "view configuration")
     if value["format"] != VIEW_CONFIG_FORMAT or value["schema_version"] != SCHEMA_VERSION:
         raise GitViewspaceError("INVALID_STATE", "unsupported view configuration")

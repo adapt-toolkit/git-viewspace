@@ -1,0 +1,554 @@
+[
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 3.48,
+    "p95_us": 4.73,
+    "p99_us": 9.69
+  },
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 3.73,
+    "p95_us": 4.72,
+    "p99_us": 12.3
+  },
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 6.28,
+    "p95_us": 9.18,
+    "p99_us": 51.35
+  },
+  {
+    "repeat": 0,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 4.08,
+    "p95_us": 4.909,
+    "p99_us": 11.39
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 20.28,
+    "p95_us": 28.89,
+    "p99_us": 46.65
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 17.435,
+    "p95_us": 26.11,
+    "p99_us": 40.01
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 41.46,
+    "p95_us": 96.749,
+    "p99_us": 145.9
+  },
+  {
+    "repeat": 0,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 21.6,
+    "p95_us": 28.669,
+    "p99_us": 44.45
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 187.7695,
+    "p95_us": 308.72,
+    "p99_us": 388.07
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 181.855,
+    "p95_us": 308.111,
+    "p99_us": 432.851
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 517.3155,
+    "p95_us": 769.78,
+    "p99_us": 982.39
+  },
+  {
+    "repeat": 0,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 314.0,
+    "p95_us": 400.33,
+    "p99_us": 599.91
+  },
+  {
+    "repeat": 0,
+    "bytes": 4194304,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 737.36,
+    "p95_us": 1068.669,
+    "p99_us": 1444.06
+  },
+  {
+    "repeat": 0,
+    "bytes": 4194304,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 718.615,
+    "p95_us": 1013.9,
+    "p99_us": 1264.58
+  },
+  {
+    "repeat": 0,
+    "bytes": 4194304,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 2016.81,
+    "p95_us": 2651.55,
+    "p99_us": 2850.86
+  },
+  {
+    "repeat": 0,
+    "bytes": 4194304,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 2011.835,
+    "p95_us": 2575.81,
+    "p99_us": 4605.64
+  },
+  {
+    "repeat": 0,
+    "path": "direct",
+    "operation": "open-stat-close",
+    "median_us": 5.25
+  },
+  {
+    "repeat": 0,
+    "path": "routed",
+    "operation": "open-stat-close",
+    "median_us": 309.1405
+  },
+  {
+    "repeat": 0,
+    "path": "direct",
+    "operation": "eight-reader-wall",
+    "files": 8,
+    "seconds": 0.15777419321238995
+  },
+  {
+    "repeat": 0,
+    "path": "routed",
+    "operation": "eight-reader-wall",
+    "files": 8,
+    "seconds": 0.040633516386151314
+  },
+  {
+    "repeat": 0,
+    "path": "direct",
+    "operation": "eight-writer-wall",
+    "files": 8,
+    "seconds": 0.06035626772791147
+  },
+  {
+    "repeat": 0,
+    "path": "routed",
+    "operation": "eight-writer-wall",
+    "files": 8,
+    "seconds": 0.03849749639630318
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 2.33,
+    "p95_us": 3.09,
+    "p99_us": 3.73
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 2.09,
+    "p95_us": 2.72,
+    "p99_us": 3.2
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 3.0,
+    "p95_us": 3.789,
+    "p99_us": 6.25
+  },
+  {
+    "repeat": 1,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 2.78,
+    "p95_us": 3.68,
+    "p99_us": 4.71
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 13.54,
+    "p95_us": 19.89,
+    "p99_us": 26.74
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 12.71,
+    "p95_us": 18.22,
+    "p99_us": 22.42
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 20.6355,
+    "p95_us": 27.52,
+    "p99_us": 41.52
+  },
+  {
+    "repeat": 1,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 21.3445,
+    "p95_us": 28.63,
+    "p99_us": 52.23
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 189.385,
+    "p95_us": 322.92,
+    "p99_us": 517.84
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 184.2355,
+    "p95_us": 275.29,
+    "p99_us": 329.61
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 332.955,
+    "p95_us": 441.48,
+    "p99_us": 553.6
+  },
+  {
+    "repeat": 1,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 302.365,
+    "p95_us": 387.42,
+    "p99_us": 418.43
+  },
+  {
+    "repeat": 1,
+    "bytes": 4194304,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 749.63,
+    "p95_us": 1153.36,
+    "p99_us": 1611.48
+  },
+  {
+    "repeat": 1,
+    "bytes": 4194304,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 766.8495,
+    "p95_us": 1287.65,
+    "p99_us": 1588.06
+  },
+  {
+    "repeat": 1,
+    "bytes": 4194304,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 1852.37,
+    "p95_us": 2465.84,
+    "p99_us": 2799.84
+  },
+  {
+    "repeat": 1,
+    "bytes": 4194304,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 2094.745,
+    "p95_us": 2985.119,
+    "p99_us": 3534.86
+  },
+  {
+    "repeat": 1,
+    "path": "routed",
+    "operation": "open-stat-close",
+    "median_us": 298.9945
+  },
+  {
+    "repeat": 1,
+    "path": "direct",
+    "operation": "open-stat-close",
+    "median_us": 5.265
+  },
+  {
+    "repeat": 1,
+    "path": "routed",
+    "operation": "eight-reader-wall",
+    "files": 8,
+    "seconds": 0.1421617129817605
+  },
+  {
+    "repeat": 1,
+    "path": "direct",
+    "operation": "eight-reader-wall",
+    "files": 8,
+    "seconds": 0.04085634741932154
+  },
+  {
+    "repeat": 1,
+    "path": "routed",
+    "operation": "eight-writer-wall",
+    "files": 8,
+    "seconds": 0.08468574471771717
+  },
+  {
+    "repeat": 1,
+    "path": "direct",
+    "operation": "eight-writer-wall",
+    "files": 8,
+    "seconds": 0.040230308659374714
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 2.591,
+    "p95_us": 3.36,
+    "p99_us": 4.171
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 2.76,
+    "p95_us": 3.76,
+    "p99_us": 4.87
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 3.4995,
+    "p95_us": 4.651,
+    "p99_us": 6.37
+  },
+  {
+    "repeat": 2,
+    "bytes": 4096,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 3.52,
+    "p95_us": 4.469,
+    "p99_us": 6.6
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 17.305,
+    "p95_us": 25.46,
+    "p99_us": 46.4
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 17.72,
+    "p95_us": 25.32,
+    "p99_us": 33.56
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 27.865,
+    "p95_us": 35.69,
+    "p99_us": 75.33
+  },
+  {
+    "repeat": 2,
+    "bytes": 65536,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 29.05,
+    "p95_us": 40.549,
+    "p99_us": 65.469
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 279.8745,
+    "p95_us": 466.9,
+    "p99_us": 637.92
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 227.0905,
+    "p95_us": 339.769,
+    "p99_us": 410.23
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 312.41,
+    "p95_us": 396.811,
+    "p99_us": 512.56
+  },
+  {
+    "repeat": 2,
+    "bytes": 1048576,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 327.52,
+    "p95_us": 440.82,
+    "p99_us": 595.89
+  },
+  {
+    "repeat": 2,
+    "bytes": 4194304,
+    "operation": "read",
+    "path": "direct",
+    "median_us": 850.8055,
+    "p95_us": 1612.51,
+    "p99_us": 2150.78
+  },
+  {
+    "repeat": 2,
+    "bytes": 4194304,
+    "operation": "read",
+    "path": "routed",
+    "median_us": 751.18,
+    "p95_us": 1151.25,
+    "p99_us": 1361.54
+  },
+  {
+    "repeat": 2,
+    "bytes": 4194304,
+    "operation": "write",
+    "path": "direct",
+    "median_us": 1268.92,
+    "p95_us": 1557.07,
+    "p99_us": 1800.63
+  },
+  {
+    "repeat": 2,
+    "bytes": 4194304,
+    "operation": "write",
+    "path": "routed",
+    "median_us": 1356.03,
+    "p95_us": 1794.72,
+    "p99_us": 2056.17
+  },
+  {
+    "repeat": 2,
+    "path": "direct",
+    "operation": "open-stat-close",
+    "median_us": 5.16
+  },
+  {
+    "repeat": 2,
+    "path": "routed",
+    "operation": "open-stat-close",
+    "median_us": 294.78
+  },
+  {
+    "repeat": 2,
+    "path": "direct",
+    "operation": "eight-reader-wall",
+    "files": 8,
+    "seconds": 0.11921234522014856
+  },
+  {
+    "repeat": 2,
+    "path": "routed",
+    "operation": "eight-reader-wall",
+    "files": 8,
+    "seconds": 0.03826790954917669
+  },
+  {
+    "repeat": 2,
+    "path": "direct",
+    "operation": "eight-writer-wall",
+    "files": 8,
+    "seconds": 0.05354285705834627
+  },
+  {
+    "repeat": 2,
+    "path": "routed",
+    "operation": "eight-writer-wall",
+    "files": 8,
+    "seconds": 0.04436580743640661
+  }
+]

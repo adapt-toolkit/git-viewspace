@@ -323,3 +323,12 @@ Destroys a stopped view. Dirty writable state or a pending transition is
 rejected unless `--discard` explicitly authorizes its loss. The common
 existing-view identity precondition applies. Successful JSON output includes
 the destroyed `view_id`.
+
+## Optional routed external files
+
+`view routing enable NAME --executable ABSOLUTE_HELPER [--runtime-dir RELATIVE=ABSOLUTE]...`
+configures a stopped view. `view routing disable NAME` removes that configuration;
+`view routing rebind NAME` explicitly accepts current external file identities.
+The optional `--ensure-view-id ID` guard prevents targeting a recreated view.
+See [routing](routing.md) for descriptor format, installation, supported operations,
+readonly behavior and recovery constraints.

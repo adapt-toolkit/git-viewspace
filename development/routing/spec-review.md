@@ -21,3 +21,14 @@ Accepted recommendations:
 These clarify the intended scope without adding replacement transactions, live
 configuration, distributed locking, generation recovery or application-specific code.
 Implementation may choose simpler mechanisms if they meet the explicit tests.
+
+## Runtime-directory amendment review
+
+A fresh independent read-only reviewer examined the proposed runtime bind mounts
+against the existing specification and implementation. Recommendation: adopt as a
+manager-only feature, not FUSE directory forwarding. Accepted the marker-file
+solution to Git's inability to track empty directories, lifecycle ordering and
+ownership checks, per-bind readonly verification, socket side-effect clarification,
+and reuse of protected ancestor handling. The specification and workplan record
+these requirements and their focused mounted tests. No broad socket-proxy system
+or transactional directory semantics are introduced.

@@ -26,3 +26,9 @@ See [test authoring](tests/how_to_write_tests.md) for descriptors and exact
 test registration. Preserve upstream notices. Changes should include focused
 regressions, especially for lifecycle, crash recovery, and concurrency behavior.
 Contributions are under Apache-2.0; only contribute code you are authorized to license.
+
+For optional routing acceptance, build the helper as described in
+[routing](apps/git-viewspace/doc/routing.md), set `VIEWSPACE_ROUTER_BIN` to its
+absolute path, and run `--scope exhaustive --profile full`. The `host` profile
+alone excludes cases also labelled `privileged`. Routed host tests create their
+own disposable roots and assert cleanup; never point them at a valuable root.
