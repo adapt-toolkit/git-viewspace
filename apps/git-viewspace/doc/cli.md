@@ -53,7 +53,7 @@ contract.
 
 Initialization is retryable and idempotent for the same arguments. It rejects
 dirty, shallow, sparse, bare, linked-worktree, or otherwise unsupported repositories.
-Top-level pinned submodules have a restricted explicit workflow; see
+Pinned submodules, including nested dependencies, have an explicit read-only workflow; see
 [submodule support](../../../SUBMODULES.md).
 
 ### `start`
@@ -92,9 +92,12 @@ forceful whole-root cleanup boundary. View definitions and their
 
 ### `submodule prepare` and `submodule pin`
 
+Use `prepare --recursive` to acquire a module and all pinned descendants.
+Progress is available in `ROOT/run/submodule-prepare.json`; reads never fetch.
+
 ```text
 git-viewspace --root <root> submodule prepare --at <commit-or-ref> \
-  --path <registered-path> [--commit <exact-module-commit>]
+  --path <registered-path> [--commit <exact-module-commit>] [--recursive]
 git-viewspace --root <root> submodule pin --branch <branch> \
   --path <registered-path> --commit <exact-module-commit> --message <message>
 ```

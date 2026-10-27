@@ -92,6 +92,7 @@ def _parser():
     acquire.add_argument("--at", required=True)
     acquire.add_argument("--path", required=True)
     acquire.add_argument("--commit", default="")
+    acquire.add_argument("--recursive", action="store_true", help="prepare all pinned descendants")
     update = module_commands.add_parser("pin")
     update.add_argument("--branch", required=True)
     update.add_argument("--path", required=True)
@@ -337,6 +338,7 @@ def run(argv=None, *, initializer=None):
             keywords = {"path": arguments.path, "commit": arguments.commit}
             if arguments.module_command == "prepare":
                 keywords["at"] = arguments.at
+                keywords["recursive"] = arguments.recursive
             else:
                 keywords.update(branch=arguments.branch, message=arguments.message)
             payload = submodule_operation(arguments.root, arguments.module_command, **keywords)

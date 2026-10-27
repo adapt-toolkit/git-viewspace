@@ -84,6 +84,10 @@ def validate_request(value):
         elif executable is not None:
             raise GitViewspaceError("INVALID_REQUEST", "executable applies only to enable")
     actual_fields = set(value)
+    if command == "submodule-prepare" and "recursive" in value:
+        if type(value["recursive"]) is not bool:
+            raise GitViewspaceError("INVALID_REQUEST", "recursive must be boolean")
+        actual_fields.discard("recursive")
     if command == "view-routing" and "runtime_directories" in value:
         from .runtime_mounts import validate_mapping
         validate_mapping(value["runtime_directories"])

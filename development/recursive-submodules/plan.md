@@ -38,7 +38,7 @@ or the daemon's general execution architecture. Publish this branch only.
    current 180-second RPC allowance. Each fetch receives remaining time and its
    process group is reaped on timeout. All preparation-owned Git subprocesses, including local metadata/validation,
    receive the remaining deadline. Progress is an atomically replaced, bounded
-   `runtime/submodule-prepare.json` (path, commit, phase, counts, timestamps and
+   `run/submodule-prepare.json` (path, commit, phase, counts, timestamps and
    terminal success/error code; no URLs or raw Git errors). A running record
    left by a stopped daemon is stale diagnostics, never restart authority.
    Prepared/reused totals are returned. No replay journal is needed. RPC queue
@@ -137,3 +137,23 @@ before implementation. All findings accepted:
 Follow-up verdict: **approved** before implementation. The reviewer additionally
 requires restrictive permissions for `source.json`, since origin URLs may contain
 credentials; URL values must not appear in progress or public error details.
+
+## Implementation review dispositions
+
+Independent read-only reviewer: recursive_implementation_review.
+
+- P1 accepted: commit/tree presence alone did not prove blob availability. Added
+  batched blob identity/type checks to module validation, under the preparation
+  budget. Added missing-blob rejection during cached preparation, pinning and
+  view preflight. Avoid payload decompression and per-blob subprocesses.
+- P2 accepted: whole-path normalization differed from Git relative URL semantics.
+  Consume leading relative components only, preserving interior spelling.
+  Explicitly reject traversal above URL/path roots, rather than allowing a
+  relative location to change a host. Added Git parity and rejection cases.
+- Mounted acceptance found progress filename missing from runtime admission;
+  recognize and validate the singleton diagnostic file on restart.
+
+Follow-up verdict: **approved**. Reviewer reran the expanded unit tests (16
+including the imported legacy tests) and confirmed both findings resolved, with
+no remaining actionable findings. Parent remains responsible for mounted
+qualification and final branch publication.

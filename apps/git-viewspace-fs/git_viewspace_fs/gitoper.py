@@ -47,6 +47,9 @@ class _ResolvedEntry:
     repository: Repository | None = None
     size: int | None = None
     content_key: tuple[str, str] | None = None
+    module_commit: str | None = None
+    module_root: str = ""
+    module_url: str | None = None
 
 
 class GitOperations:
@@ -174,15 +177,20 @@ class GitOperations:
             )
         if entry.filemode == FileMode.COMMIT:
             from git_viewspace.errors import GitViewspaceError
-            from git_viewspace.submodules import store_path, validate_store
+            from git_viewspace.submodules import store_path, root_url
 
             try:
-                item = self._module_registrations(commit)[path]
+                base = parent.module_url if parent.module_commit else root_url(self._pygit.path)
+                relative = path[len(parent.module_root) + 1:] if parent.module_root else path
+                item = self._module_registrations(
+                    repository.path, parent.module_commit or commit, base
+                )[relative]
                 store = store_path(self._pygit.path, item["url"])
-                validate_store(store, str(entry.id))
                 module = Repository(str(store))
                 tree = module[entry.id].tree
-                return _ResolvedEntry(FileMode.TREE, tree.id, tree, module)
+                return _ResolvedEntry(FileMode.TREE, tree.id, tree, module,
+                                      module_commit=str(entry.id), module_root=path,
+                                      module_url=item["url"])
             except (KeyError, ValueError, GitError, GitViewspaceError) as error:
                 raise GitOperError(
                     errno.EIO, "pinned module is unavailable or unsupported"
@@ -209,12 +217,15 @@ class GitOperations:
             entry.id,
             obj if isinstance(obj, Tree) else None,
             repository,
+            module_commit=parent.module_commit,
+            module_root=parent.module_root,
+            module_url=parent.module_url,
         )
 
-    def _load_modules(self, commit):
-        from git_viewspace.submodules import entries
+    def _load_modules(self, repository, commit, base):
+        from git_viewspace.submodules import resolved_entries
 
-        return entries(Path(self._pygit.path), commit)
+        return resolved_entries(Path(repository), commit, base)
 
     def _entry(self, commit, path):
         self._validate_path(path)

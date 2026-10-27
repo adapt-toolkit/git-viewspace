@@ -380,10 +380,14 @@ class Daemon:
             **result,
         }
 
-    def submodule_prepare(self, at, path, commit):
+    def submodule_prepare(self, at, path, commit, recursive=False):
         from .submodules import prepare
+        started = time.time()
+        def progress(value):
+            atomic_json(self.context.root / "run/submodule-prepare.json",
+                        {"pid": os.getpid(), "started": started, "updated": time.time(), **value})
         return {"ok": True, "command": "submodule prepare", "root": str(self.context.root),
-                **prepare(self.context.repository, at, path, commit)}
+                **prepare(self.context.repository, at, path, commit, recursive=recursive, progress=progress)}
 
     def submodule_pin(self, branch, path, commit, message):
         from .submodules import pin
@@ -1299,7 +1303,7 @@ class Daemon:
             elif command == "branch-pin":
                 response = self.branch_pin(value["branch"], value["commit"])
             elif command == "submodule-prepare":
-                response = self.submodule_prepare(value["at"], value["path"], value["commit"])
+                response = self.submodule_prepare(value["at"], value["path"], value["commit"], value.get("recursive", False))
             elif command == "submodule-pin":
                 response = self.submodule_pin(value["branch"], value["path"], value["commit"], value["message"])
             elif command == "view-init-readonly":

@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::recursive-submodules",
+  "labels": [],
+  "prerequisites": [
+    "command:python3",
+    "command:git",
+    "python-module:pygit2"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_three_levels_pins_offline_reads_and_cache",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_partial_failure_retry_retains_objects_and_branch",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_diamond_deduplicates_fetch_not_occurrences",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_same_dependency_at_two_commits",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_relative_root_base_survives_origin_change_and_move",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_originless_relative_base_is_frozen",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_same_commit_different_parent_urls",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_invalid_registration_and_cycle",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_missing_blob_refuses_preparation_pin_and_mount_preflight",
+      "tests.test_recursive_submodules.RecursiveSubmoduleTests.test_metadata_deadline_and_progress",
+      "tests.test_recursive_submodules.RecursivePublicContractTests.test_protocol_old_new_and_invalid",
+      "tests.test_recursive_submodules.RecursivePublicContractTests.test_url_resolution",
+      "tests.test_recursive_submodules.RecursivePublicContractTests.test_relative_resolution_matches_git_init"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "apps/git-viewspace"
+    },
+    "environment": {
+      "inherit": [
+        "HOME",
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace:{repository}/apps/git-viewspace-fs",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 90,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

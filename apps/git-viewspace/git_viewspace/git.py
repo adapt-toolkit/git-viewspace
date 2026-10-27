@@ -77,6 +77,7 @@ class Git:
         identity=None,
         environment_overrides=None,
         check=True,
+        timeout=None,
     ):
         command = [self.executable, *map(str, arguments)]
         environment = self._environment(authentication=authentication, identity=identity)
@@ -91,6 +92,7 @@ class Git:
                 stderr=subprocess.PIPE,
                 env=environment,
                 check=False,
+                timeout=timeout,
             )
         except OSError as error:
             raise GitViewspaceError("GIT_EXEC_FAILED", "could not execute Git", detail=str(error)) from error
@@ -174,8 +176,9 @@ class Git:
             return False
         raise GitViewspaceError("INVALID_REPOSITORY", f"invalid Git setting {key}")
 
-    def _validate_commit_tree(self, repository, commit):
+    def _validate_commit_tree(self, repository, commit, *, require_blobs=False):
         tree = self._repo(repository, ("ls-tree", "-r", "-z", commit)).stdout
+        blobs = set()
         for record in tree.split(b"\0"):
             if not record:
                 continue
@@ -196,6 +199,7 @@ class Git:
                 continue
             if mode not in {b"100644", b"100755", b"120000"} or object_type != b"blob":
                 raise GitViewspaceError("UNSUPPORTED_COMMIT", f"unsupported Git tree mode at {path}")
+            blobs.add(object_id)
             if mode == b"120000":
                 target = self._repo(
                     repository,
@@ -214,9 +218,20 @@ class Git:
                         f"symbolic-link target contains NUL: {path}",
                     )
 
+        if require_blobs and blobs:
+            # Batch header checks avoid decompressing every payload or starting
+            # a subprocess per file, while detecting incomplete object stores.
+            ordered = sorted(blobs)
+            result = self._repo(
+                repository, ("cat-file", "--batch-check=%(objectname) %(objecttype)"),
+                input_bytes=b"\n".join(ordered) + b"\n",
+            ).stdout.splitlines()
+            if result != [oid + b" blob" for oid in ordered]:
+                raise GitViewspaceError("SUBMODULE_NOT_PREPARED", "module tree references unavailable blobs")
+
         if b"160000 " in tree:
             from .submodules import entries
-            entries(repository, commit)
+            entries(repository, commit, git=self)
 
     def resolve_commit(self, repository, commitish):
         if (

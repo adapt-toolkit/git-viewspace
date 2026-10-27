@@ -300,5 +300,8 @@ class RootContext:
         return value
 
     def runtime_entries(self):
-        allowed = {"manager.sock", "runtime.json", "viewfs.stderr"}
+        allowed = {"manager.sock", "runtime.json", "viewfs.stderr", "submodule-prepare.json"}
+        progress = self.root / "run/submodule-prepare.json"
+        if progress.exists() or progress.is_symlink():
+            validate_stable_file(progress, self.uid, self.gid)
         return tuple(sorted(entry.name for entry in (self.root / "run").iterdir() if entry.name not in allowed))
