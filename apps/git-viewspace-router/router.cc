@@ -197,7 +197,9 @@ std::shared_ptr<Binding> binding(const char *p) {
   std::string path = name(p), desc = routing::descriptor_path(path);
   struct stat ds{}, ordinary{};
   if (fstatat(rootfd,relative(desc.c_str()),&ds,AT_SYMLINK_NOFOLLOW)<0) {
-    if (errno==ENOENT) {
+    // The descriptor prefix can exceed NAME_MAX for a valid ordinary name.
+    // Let the ordinary filesystem operation validate the original path.
+    if (errno==ENOENT || errno==ENAMETOOLONG) {
       bindings.erase(path);
       return {};
     }

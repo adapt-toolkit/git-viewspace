@@ -21,6 +21,9 @@ external = root / "external"
 external.write_text("external baseline")
 (seed / ".git-viewspace-#SF#-credential").write_text(str(external) + "\n")
 (seed / "ordinary").write_text("baseline")
+name_limit = os.pathconf(seed, "PC_NAME_MAX")
+long_name = "l" * name_limit
+(seed / long_name).write_text("long ordinary baseline")
 exe = shutil.which("git-viewspace")
 if exe is None:
     raise RuntimeError("git-viewspace must be on PATH")
@@ -61,6 +64,33 @@ try:
     )
     vm("view", "start", "test")
     mount = vmroot / "views/test/mnt"
+    # A valid ordinary basename can be too long to have a descriptor sibling.
+    # Synthetic lookup failure must not hide it or prevent ordinary mutations.
+    long_file = mount / long_name
+    assert long_file.stat().st_size == len("long ordinary baseline")
+    assert long_file.read_text() == "long ordinary baseline"
+    long_file.write_text("updated long name")
+    assert long_file.read_text() == "updated long name"
+    moved = mount / ("m" * name_limit)
+    long_file.rename(moved)
+    assert moved.read_text() == "updated long name"
+    moved.unlink()
+    long_file.write_text("new long file")
+    assert long_file.read_text() == "new long file"
+    long_file.unlink()
+    long_directory = mount / ("d" * name_limit)
+    long_directory.mkdir()
+    (long_directory / "child").write_text("nested")
+    assert (long_directory / "child").read_text() == "nested"
+    (long_directory / "child").unlink()
+    long_directory.rmdir()
+    try:
+        (mount / ("x" * (name_limit + 1))).write_text("invalid basename")
+    except OSError as error:
+        assert error.errno == errno.ENAMETOOLONG
+    else:
+        raise AssertionError("invalid ordinary basename unexpectedly accepted")
+    receipt["ordinary_name_max_preserved"] = True
     # Dynamic declarations: both names visible; only atomic install is allowed.
     descriptor = mount / ".git-viewspace-#SF#-dynamic"
     second = root / "second-external"
