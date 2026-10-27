@@ -1,0 +1,68 @@
+09:57:41.534282 common-main.c:55             | d0 | main                     | version      |     |           |           |              | 2.43.0
+09:57:41.534306 common-main.c:56             | d0 | main                     | start        |     |  0.000382 |           |              | git -C /mnt/alexb-scratch/staging-4045-20261027/repo --literal-pathspecs add -A --force --pathspec-from-file=- --pathspec-file-nul
+09:57:41.534350 compat/linux/procinfo.c:170  | d0 | main                     | cmd_ancestry |     |           |           |              | ancestry:[python3 systemd]
+09:57:41.534414 repository.c:143             | d0 | main                     | def_repo     | r1  |           |           |              | worktree:/mnt/alexb-scratch/staging-4045-20261027/repo
+09:57:41.534456 git.c:464                    | d0 | main                     | cmd_name     |     |           |           |              | add (add)
+09:57:41.534582 read-cache.c:2384            | d0 | main                     | region_enter | r1  |  0.000661 |           | index        | label:do_read_index /mnt/alexb-scratch/staging-4045-20261027/trial-index
+09:57:41.581680 cache-tree.c:634             | d0 | main                     | region_enter | r1  |  0.047756 |           | cache_tree   | ..label:read
+09:57:41.581815 cache-tree.c:636             | d0 | main                     | region_leave | r1  |  0.047896 |  0.000140 | cache_tree   | ..label:read
+09:57:41.582245 read-cache.c:2333            | d0 | main                     | data         | r1  |  0.048324 |  0.047663 | index        | ..read/version:2
+09:57:41.582253 read-cache.c:2335            | d0 | main                     | data         | r1  |  0.048333 |  0.047672 | index        | ..read/cache_nr:500000
+09:57:41.582259 read-cache.c:2389            | d0 | main                     | region_leave | r1  |  0.048338 |  0.047677 | index        | label:do_read_index /mnt/alexb-scratch/staging-4045-20261027/trial-index
+09:57:41.582266 preload-index.c:120          | d0 | main                     | region_enter |     |  0.048347 |           | index        | label:preload
+09:57:41.692579 preload-index.c:168          | d0 | main                     | data         |     |  0.158657 |  0.110310 | index        | ..preload/sum_lstat:140000
+09:57:41.692602 preload-index.c:169          | d0 | main                     | region_leave |     |  0.158682 |  0.110335 | index        | label:preload
+09:57:41.695671 dir.c:3043                   | d0 | main                     | region_enter | r1  |  0.161749 |           | dir          | label:read_directory
+09:57:41.695707 name-hash.c:591              | d0 | main                     | region_enter | r1  |  0.161787 |           | index        | ..label:name-hash-init
+09:57:41.756902 name-hash.c:612              | d0 | main                     | region_leave | r1  |  0.222976 |  0.061189 | index        | ..label:name-hash-init
+09:57:41.911597 dir.c:3015                   | d0 | main                     | data         | r1  |  0.377673 |  0.215924 | read_directo | ..path:data/
+09:57:41.911617 dir.c:3019                   | d0 | main                     | data         | r1  |  0.377697 |  0.215948 | read_directo | ..directories-visited:141
+09:57:41.911622 dir.c:3021                   | d0 | main                     | data         | r1  |  0.377702 |  0.215953 | read_directo | ..paths-visited:140500
+09:57:41.911626 dir.c:3066                   | d0 | main                     | region_leave | r1  |  0.377706 |  0.215957 | dir          | label:read_directory
+09:57:46.194019 read-cache.c:3146            | d0 | main                     | region_enter | r1  |  4.660096 |           | index        | label:do_write_index /mnt/alexb-scratch/staging-4045-20261027/trial-index.lock
+09:57:46.359022 cache-tree.c:538             | d0 | main                     | region_enter | r1  |  4.825100 |           | cache_tree   | ..label:write
+09:57:46.359097 cache-tree.c:540             | d0 | main                     | region_leave | r1  |  4.825176 |  0.000076 | cache_tree   | ..label:write
+09:57:46.359427 read-cache.c:3106            | d0 | main                     | data         | r1  |  4.825506 |  0.165410 | index        | ..write/version:2
+09:57:46.359439 read-cache.c:3108            | d0 | main                     | data         | r1  |  4.825519 |  0.165423 | index        | ..write/cache_nr:500000
+09:57:46.359444 read-cache.c:3149            | d0 | main                     | region_leave | r1  |  4.825524 |  0.165428 | index        | label:do_write_index /mnt/alexb-scratch/staging-4045-20261027/trial-index.lock
+09:57:46.368737 git.c:723                    | d0 | main                     | exit         |     |  4.834816 |           |              | code:0
+09:57:46.368751 trace2/tr2_tgt_perf.c:217    | d0 | main                     | atexit       |     |  4.834830 |           |              | code:0
+09:57:46.385149 common-main.c:55             | d0 | main                     | version      |     |           |           |              | 2.43.0
+09:57:46.385199 common-main.c:56             | d0 | main                     | start        |     |  0.000320 |           |              | git -C /mnt/alexb-scratch/staging-4045-20261027/repo write-tree
+09:57:46.385246 compat/linux/procinfo.c:170  | d0 | main                     | cmd_ancestry |     |           |           |              | ancestry:[python3 systemd]
+09:57:46.385316 repository.c:143             | d0 | main                     | def_repo     | r1  |           |           |              | worktree:/mnt/alexb-scratch/staging-4045-20261027/repo
+09:57:46.385351 git.c:464                    | d0 | main                     | cmd_name     |     |           |           |              | write-tree (write-tree)
+09:57:46.385434 read-cache.c:2384            | d0 | main                     | region_enter | r1  |  0.000560 |           | index        | label:do_read_index /mnt/alexb-scratch/staging-4045-20261027/trial-index
+09:57:46.431250 cache-tree.c:634             | d0 | main                     | region_enter | r1  |  0.046374 |           | cache_tree   | ..label:read
+09:57:46.431380 cache-tree.c:636             | d0 | main                     | region_leave | r1  |  0.046507 |  0.000133 | cache_tree   | ..label:read
+09:57:46.431646 read-cache.c:2333            | d0 | main                     | data         | r1  |  0.046773 |  0.046213 | index        | ..read/version:2
+09:57:46.431655 read-cache.c:2335            | d0 | main                     | data         | r1  |  0.046782 |  0.046222 | index        | ..read/cache_nr:500000
+09:57:46.431660 read-cache.c:2389            | d0 | main                     | region_leave | r1  |  0.046787 |  0.046227 | index        | label:do_read_index /mnt/alexb-scratch/staging-4045-20261027/trial-index
+09:57:46.437415 cache-tree.c:483             | d0 | main                     | region_enter | r1  |  0.052540 |           | cache_tree   | label:update
+09:57:46.726691 cache-tree.c:488             | d0 | main                     | region_leave | r1  |  0.341815 |  0.289275 | cache_tree   | label:update
+09:57:46.726711 read-cache.c:3146            | d0 | main                     | region_enter | r1  |  0.341838 |           | index        | label:do_write_index /mnt/alexb-scratch/staging-4045-20261027/trial-index.lock
+09:57:46.890850 cache-tree.c:538             | d0 | main                     | region_enter | r1  |  0.505974 |           | cache_tree   | ..label:write
+09:57:46.890954 cache-tree.c:540             | d0 | main                     | region_leave | r1  |  0.506081 |  0.000107 | cache_tree   | ..label:write
+09:57:46.891350 read-cache.c:3106            | d0 | main                     | data         | r1  |  0.506477 |  0.164639 | index        | ..write/version:2
+09:57:46.891361 read-cache.c:3108            | d0 | main                     | data         | r1  |  0.506488 |  0.164650 | index        | ..write/cache_nr:500000
+09:57:46.891366 read-cache.c:3149            | d0 | main                     | region_leave | r1  |  0.506492 |  0.164654 | index        | label:do_write_index /mnt/alexb-scratch/staging-4045-20261027/trial-index.lock
+09:57:46.898320 git.c:723                    | d0 | main                     | exit         |     |  0.513446 |           |              | code:0
+09:57:46.898337 trace2/tr2_tgt_perf.c:217    | d0 | main                     | atexit       |     |  0.513464 |           |              | code:0
+09:57:46.907069 common-main.c:55             | d0 | main                     | version      |     |           |           |              | 2.43.0
+09:57:46.907084 common-main.c:56             | d0 | main                     | start        |     |  0.000267 |           |              | git -C /mnt/alexb-scratch/staging-4045-20261027/repo diff-index --cached --no-renames --name-only -z 8bd3bcc0b36e86b9e620972065166de5a5e0d4c7 --
+09:57:46.907125 compat/linux/procinfo.c:170  | d0 | main                     | cmd_ancestry |     |           |           |              | ancestry:[python3 systemd]
+09:57:46.907234 repository.c:143             | d0 | main                     | def_repo     | r1  |           |           |              | worktree:/mnt/alexb-scratch/staging-4045-20261027/repo
+09:57:46.907277 git.c:464                    | d0 | main                     | cmd_name     |     |           |           |              | diff-index (diff-index)
+09:57:46.907479 read-cache.c:2384            | d0 | main                     | region_enter | r1  |  0.000664 |           | index        | label:do_read_index /mnt/alexb-scratch/staging-4045-20261027/trial-index
+09:57:46.950742 cache-tree.c:634             | d0 | main                     | region_enter | r1  |  0.043925 |           | cache_tree   | ..label:read
+09:57:46.950892 cache-tree.c:636             | d0 | main                     | region_leave | r1  |  0.044077 |  0.000152 | cache_tree   | ..label:read
+09:57:46.951149 read-cache.c:2333            | d0 | main                     | data         | r1  |  0.044334 |  0.043670 | index        | ..read/version:2
+09:57:46.951184 read-cache.c:2335            | d0 | main                     | data         | r1  |  0.044370 |  0.043706 | index        | ..read/cache_nr:500000
+09:57:46.951196 read-cache.c:2389            | d0 | main                     | region_leave | r1  |  0.044382 |  0.043718 | index        | label:do_read_index /mnt/alexb-scratch/staging-4045-20261027/trial-index
+09:57:46.951210 unpack-trees.c:1897          | d0 | main                     | region_enter | r1  |  0.044396 |           | unpack_trees | label:unpack_trees
+09:57:46.954059 unpack-trees.c:2001          | d0 | main                     | region_enter | r1  |  0.047243 |           | unpack_trees | ..label:traverse_trees
+09:57:47.018681 unpack-trees.c:2003          | d0 | main                     | region_leave | r1  |  0.111864 |  0.064621 | unpack_trees | ..label:traverse_trees
+09:57:47.021553 unpack-trees.c:2095          | d0 | main                     | region_leave | r1  |  0.114737 |  0.070341 | unpack_trees | label:unpack_trees
+09:57:47.051370 git.c:723                    | d0 | main                     | exit         |     |  0.144553 |           |              | code:0
+09:57:47.051828 tree-walk.c:194              | d0 | main                     | data_json    | r1  |  0.145013 |  0.145013 | traverse_tre | statistics:{"traverse_trees_count":142,"traverse_trees_max_depth":3}
+09:57:47.052280 trace2/tr2_tgt_perf.c:217    | d0 | main                     | atexit       |     |  0.145464 |           |              | code:0

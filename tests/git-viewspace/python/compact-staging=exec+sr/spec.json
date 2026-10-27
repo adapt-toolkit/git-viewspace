@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "basic",
+  "driver": "exec",
+  "selector": "python::git-viewspace::compact-staging",
+  "labels": [],
+  "prerequisites": [
+    "command:python3"
+  ],
+  "config": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_staging.StagingTests.test_native_tree_equivalence_and_repeated_stage",
+      "tests.test_staging.StagingTests.test_unauthorized_changes_preserve_index",
+      "tests.test_staging.StagingTests.test_locks_and_git_failure",
+      "tests.test_staging.StagingTests.test_root_selection_and_manifest_boundaries",
+      "tests.test_staging.StagingTests.test_install_does_not_remove_next_writers_locks",
+      "tests.test_staging.StagingTests.test_failed_restage_preserves_previous_stage"
+    ],
+    "cwd": {
+      "anchor": "repository",
+      "path": "."
+    },
+    "environment": {
+      "inherit": [
+        "PATH"
+      ],
+      "set": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "{repository}/apps/git-viewspace",
+        "TMPDIR": "{workspace}"
+      }
+    },
+    "timeout_seconds": 60,
+    "compare": [
+      "status"
+    ],
+    "filesystem": null
+  }
+}

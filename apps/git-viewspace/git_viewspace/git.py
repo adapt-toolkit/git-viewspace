@@ -12,6 +12,8 @@ from .errors import GitViewspaceError
 
 MAX_MERGE_CONFLICT_PATHS = 100
 MAX_MERGE_CONFLICT_PATH_BYTES = 64 * 1024
+STAGING_ROOT_LIMIT = 256
+STAGING_BROAD_THRESHOLD = 10_000
 
 
 @dataclass(frozen=True)
@@ -857,7 +859,94 @@ class Git:
             raise GitViewspaceError("CHECKOUT_DIVERGED", "checkout reset did not produce the base tree")
         return base_tree
 
+    @staticmethod
+    def _staging_roots(manifest):
+        """Compact execution paths only; the original manifest remains authoritative."""
+        if len(manifest) <= STAGING_ROOT_LIMIT:
+            return manifest
+        parents = {path.rpartition("/")[0] or "." for path in manifest}
+        roots = []
+        for path in sorted(parents):
+            if "." in parents or any(
+                path[:i] in parents for i, char in enumerate(path) if char == "/"
+            ):
+                continue
+            roots.append(path)
+        if "." in parents:
+            roots = ["."]
+        if len(roots) <= STAGING_ROOT_LIMIT and len(roots) * 4 <= len(manifest):
+            return roots
+        if len(manifest) > STAGING_BROAD_THRESHOLD:
+            return [os.path.commonpath(manifest) or "."]
+        return manifest
+
+    @staticmethod
+    def _validate_staging_delta(delta, manifest):
+        allowed = set(manifest)
+
+        def ancestors(path):
+            return (path[:i] for i, char in enumerate(path) if char == "/")
+
+        def covered(path):
+            return "." in allowed or path in allowed or any(p in allowed for p in ancestors(path))
+
+        fields = delta.decode("utf-8", "strict").split("\0")[:-1]
+        changes = list(zip(fields[::2], fields[1::2]))
+        # git-add of a new child also deletes an old blob at its parent path.
+        replaced = {parent for status, path in changes if status == "A" and covered(path)
+                    for parent in ancestors(path)}
+        unexpected = [path for status, path in changes
+                      if not covered(path) and not (status == "D" and path in replaced)]
+        if unexpected:
+            raise GitViewspaceError(
+                "INCOMPLETE_SYNC_MANIFEST", "staged changes exceed the sync manifest",
+                detail=", ".join(unexpected[:20]),
+            )
+
+    def _stage_compact(self, repository, base_commit, manifest, roots, reset_index):
+        index = Path(repository).resolve() / ".git" / "index"
+        lock = index.with_name("index.lock")
+        try:
+            handle = lock.open("xb")
+        except FileExistsError as error:
+            raise GitViewspaceError("GIT_FAILED", "Git index is locked", detail=str(lock)) from error
+        environment = {"GIT_INDEX_FILE": str(lock)}
+        nested_lock = lock.with_name("index.lock.lock")
+        installed = False
+        nested_available = not nested_lock.exists()
+
+        def run(arguments, **kwargs):
+            return self._repo_with_environment(
+                repository, arguments, environment_overrides=environment, **kwargs,
+            )
+
+        try:
+            with handle, index.open("rb") as source:
+                shutil.copyfileobj(source, handle)
+            if not nested_available:
+                raise GitViewspaceError("GIT_FAILED", "temporary Git index is locked", detail=str(nested_lock))
+            if reset_index:
+                run(("reset", "--mixed", base_commit))
+            run(("--literal-pathspecs", "add", "-A", "--force",
+                 "--pathspec-from-file=-", "--pathspec-file-nul"),
+                input_bytes=b"".join(path.encode("utf-8") + b"\0" for path in roots))
+            delta = run(("diff-index", "--cached", "--name-status", "-z", "--no-renames",
+                         "--no-ext-diff", "--no-textconv", base_commit, "--")).stdout
+            self._validate_staging_delta(delta, manifest)
+            tree = self._oid_from_result(run(("write-tree",)), "index tree identity")
+            os.replace(lock, index)
+            installed = True
+            return tree
+        finally:
+            if not installed:
+                if nested_available:
+                    nested_lock.unlink(missing_ok=True)
+                lock.unlink(missing_ok=True)
+
     def stage_manifest(self, repository, base_commit, manifest, *, reset_index=True):
+        roots = self._staging_roots(manifest)
+        if roots is not manifest:
+            return self._stage_compact(repository, base_commit, manifest, roots, reset_index)
         # Only an uninterrupted compound advance may reuse prepare_sync_checkout's proof.
         if reset_index:
             self.run(

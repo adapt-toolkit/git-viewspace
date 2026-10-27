@@ -1,0 +1,30 @@
+{
+  "staging-basic-final": {
+    "expectation_failed": 0,
+    "goldens_updated": 0,
+    "infrastructure_failed": 0,
+    "passed": 40,
+    "selected": 40,
+    "skipped": 0,
+    "unscoped": 0
+  },
+  "staging-full-final": {
+    "expectation_failed": 1,
+    "goldens_updated": 0,
+    "infrastructure_failed": 0,
+    "passed": 108,
+    "selected": 109,
+    "skipped": 0,
+    "unscoped": 0
+  },
+  "staging-host": {
+    "expectation_failed": 0,
+    "goldens_updated": 0,
+    "infrastructure_failed": 0,
+    "passed": 1,
+    "selected": 1,
+    "skipped": 0,
+    "unscoped": 0
+  },
+  "interpretation": "Full run: 108 passed, one host case failed on tmpfs; exact host case rerun on ext4 passed. Basic final: 40 passed. No implementation changes between these runs."
+}

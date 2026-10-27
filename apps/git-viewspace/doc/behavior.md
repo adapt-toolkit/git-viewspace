@@ -54,7 +54,12 @@ git --literal-pathspecs add -A --force \
   --pathspec-from-file=- --pathspec-file-nul
 ```
 
-with the sync manifest supplied as NUL-delimited input. Consequently:
+with NUL-delimited input. Large manifests may use fewer directory roots for
+execution. In that case staging occurs in a temporary index and its complete
+delta is checked against the **original** sync manifest before installing the
+index. Broader execution roots do not authorize additional changes. Small or
+modest sparse manifests retain literal staging to avoid unnecessary broad scans.
+Consequently:
 
 - a newly created ignored file is staged and committed;
 - modified or deleted tracked files are staged even if a new ignore rule
@@ -67,6 +72,11 @@ with the sync manifest supplied as NUL-delimited input. Consequently:
 After targeted staging, the manager verifies that no changed or untracked path
 remains. Commit hooks and commit signing are disabled, so they cannot change or
 reject the managed transition.
+
+Compact staging holds Git's normal `index.lock`; Git uses `index.lock.lock`
+internally for the temporary index. Ordinary failures release owned locks and
+preserve the prior index. A killed process may leave these locks, requiring the
+same stopped-writer verification and lock recovery as an interrupted Git command.
 
 This differs from an ordinary interactive Git worktree. It is a deliberate
 MVP invariant: after commit there is no unstaged or ignored filesystem residue
