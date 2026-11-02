@@ -340,9 +340,25 @@ int open_common(const char *p, fuse_file_info *fi, mode_t mode, bool creating) {
       slot->path = name(p);
     }
     if (!slot->id) {
+      // The kernel may retain a registered description after router death when
+      // another mount namespace still pins the FUSE superblock. Keep flock's
+      // original h->fd separate: dup() would share its lock ownership.
+      int flags = fcntl(h->fd, F_GETFL);
+      std::string exact = "/proc/self/fd/" + std::to_string(h->fd);
+      int backing = flags < 0 ? -1 : open(exact.c_str(),
+          (flags & ~(O_CREAT | O_TRUNC | O_EXCL | O_NOFOLLOW)) | O_CLOEXEC);
+      if (backing < 0) {
+        int e = errno;
+        registrations.erase(name(p));
+        close(h->fd);
+        return -e;
+      }
       fuse_backing_map m{};
-      m.fd = h->fd;
+      m.fd = backing;
       slot->id = ioctl(fusefd, FUSE_DEV_IOC_BACKING_OPEN, &m);
+      int registration_error = errno;
+      close(backing);
+      errno = registration_error;
       if (slot->id <= 0) {
         int e = errno;
         registrations.erase(name(p));
